@@ -3,26 +3,18 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  makeStyles,
   TextField,
 } from "@material-ui/core";
 import React from "react";
+import { LoginFormStyles } from "../../../classes";
+import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
 
 type IMainForm = {
   variant: "login" | "signup";
 };
 
-const applyStyles = makeStyles((theme) => ({
-  inputField: {
-    marginBottom: theme.spacing(2),
-  },
-  helperText: {
-    color: theme.palette.error.main,
-  },
-}));
-
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
-  const classes = applyStyles();
+  const classes = LoginFormStyles();
   //**************
   //STATE
   //**************
@@ -74,6 +66,9 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   switch (variant) {
     case "login":
       return (
+        //************
+        //LOGIN
+        //************
         <Box margin={0} padding={1}>
           <FormControl className={classes.inputField} fullWidth>
             <TextField
@@ -110,13 +105,20 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               </FormHelperText>
             ) : null}
           </FormControl>
-          <Button color="secondary" variant="contained">
+          <Button
+            color="secondary"
+            onClick={handleLoginSubmit}
+            variant="contained"
+          >
             Login
           </Button>
         </Box>
       );
     case "signup":
       return (
+        //************
+        //SIGNUP
+        //************
         <Box margin={0} padding={1}>
           <FormControl className={classes.inputField} fullWidth>
             <TextField
@@ -187,7 +189,11 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             ) : null}
           </FormControl>
 
-          <Button color="secondary" variant="contained">
+          <Button
+            color="secondary"
+            onClick={handleSignUpSubmit}
+            variant="contained"
+          >
             Sign-Up
           </Button>
         </Box>

@@ -1,6 +1,4 @@
-import { ModalTypes } from "./modal.action";
-import { IAction } from "./modal.action";
-import { IModalState } from "./modal.action";
+import { IAction, IModalState, ModalTypes } from "./modal.config";
 
 const INITIAL_STATE = {
   loginModal: false,
