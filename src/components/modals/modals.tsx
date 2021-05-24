@@ -2,8 +2,8 @@ import { Dialog, Slide } from "@material-ui/core";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ModalTypes } from "../../redux/modal/modal.config";
 import { State } from "../../redux/store";
+import { Types } from "../../redux/types";
 import { LoginModal } from "./loginModal/loginModal";
 
 const Transition = React.forwardRef(function Transition(
@@ -18,7 +18,7 @@ export const Modals = () => {
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    dispatch({ type: ModalTypes.TOGGLE_LOGIN_MODAL });
+    dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL });
     return true;
   };
 

@@ -7,15 +7,15 @@ import Button from "@material-ui/core/Button";
 import { Person } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { ModalTypes } from "../../redux/modal/modal.config";
 import { NavStyles } from "../classes";
-
+import { Types } from "../../redux/types";
 //**************
 //COMPONENT-NAVBAR
 //**************
 const NavBar = () => {
   const classes = NavStyles();
   const dispatch = useDispatch();
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -27,7 +27,9 @@ const NavBar = () => {
             Pop Thoughts
           </Typography>
           <Button
-            onClick={() => dispatch({ type: ModalTypes.TOGGLE_LOGIN_MODAL })}
+            onClick={() =>
+              dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL })
+            }
             color="secondary"
           >
             Login
