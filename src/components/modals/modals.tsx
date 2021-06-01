@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../redux/store";
 import { Types } from "../../redux/types";
 import { LoginModal } from "./loginModal/loginModal";
+import { ProfileModal } from "./ProfileModal/profileModal";
 import { ThoughtModal } from "./thoughtModal/thoughtModal";
 
 const Transition = React.forwardRef(function Transition(
@@ -39,7 +40,7 @@ export const Modals = () => {
       >
         {loginModal ? <LoginModal closeFunction={handleClose} /> : null}
         {thoughtModal ? <ThoughtModal closeFunction={handleClose} /> : null}
-        {profileModal ? <h1>PROFILE</h1> : null}
+        {profileModal ? <ProfileModal closeFunction={handleClose} /> : null}
       </Dialog>
     </div>
   );
