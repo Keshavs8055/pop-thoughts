@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../redux/store";
 import { Types } from "../../redux/types";
 import { LoginModal } from "./loginModal/loginModal";
+import { ThoughtModal } from "./thoughtModal/thoughtModal";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -12,13 +13,19 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+// MODAL INTERFACE EXPORT
+export interface IModal {
+  closeFunction: () => boolean;
+}
+
+// MODAL EXPORT
 export const Modals = () => {
   const state = useSelector((state: State) => state.ModalReducer);
-  const { loginModal } = state;
+  const { loginModal, profileModal, thoughtModal } = state;
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL });
+    dispatch({ type: Types.modalTypes.CLOSE_ALL });
     return true;
   };
 
@@ -26,11 +33,13 @@ export const Modals = () => {
     <div>
       <Dialog
         fullScreen
-        open={loginModal}
+        open={loginModal || profileModal || thoughtModal}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
         {loginModal ? <LoginModal closeFunction={handleClose} /> : null}
+        {thoughtModal ? <ThoughtModal closeFunction={handleClose} /> : null}
+        {profileModal ? <h1>PROFILE</h1> : null}
       </Dialog>
     </div>
   );

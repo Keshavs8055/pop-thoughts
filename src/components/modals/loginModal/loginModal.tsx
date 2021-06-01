@@ -9,11 +9,9 @@ import {
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import React from "react";
+import { IModal } from "../modals";
 import { MainForm } from "./Forms/login.signup";
 
-interface ILoginModal {
-  closeFunction: () => boolean;
-}
 interface ITabPanel {
   children?: React.ReactNode;
   dir?: string;
@@ -36,7 +34,7 @@ function TabPanel(props: ITabPanel) {
   );
 }
 
-export const LoginModal: React.FC<ILoginModal> = ({ closeFunction }) => {
+export const LoginModal: React.FC<IModal> = ({ closeFunction }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {

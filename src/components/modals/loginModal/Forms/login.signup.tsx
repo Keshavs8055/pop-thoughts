@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import React from "react";
-import { LoginFormStyles } from "../../../classes";
+import { FormStyles } from "../../../classes";
 import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
 
 type IMainForm = {
@@ -14,7 +14,7 @@ type IMainForm = {
 };
 
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
-  const classes = LoginFormStyles();
+  const classes = FormStyles();
   //**************
   //STATE
   //**************

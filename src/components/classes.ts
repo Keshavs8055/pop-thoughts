@@ -2,12 +2,32 @@ import { makeStyles } from "@material-ui/core";
 
 //LOGIN FORMS
 
-export const LoginFormStyles = makeStyles((theme) => ({
+export const FormStyles = makeStyles((theme) => ({
   inputField: {
     marginBottom: theme.spacing(2),
   },
   helperText: {
     color: theme.palette.error.main,
+  },
+  textarea: {
+    background: "transparent",
+    resize: "vertical",
+    padding: theme.spacing(2),
+    outline: "none",
+    fontFamily: theme.typography.fontFamily,
+    color: "#fff",
+    lineHeight: "1.1876em",
+    borderRadius: "4px",
+    boxShadow: theme.shadows[10],
+    letterSpacing: "0.00938em",
+    border: `1px solid transparent`,
+    transitionDuration: `${theme.transitions.duration.short}`,
+    "&:focus": {
+      border: `1px solid ${theme.palette.secondary.main}`,
+    },
+    "&:focus::placeholder": {
+      color: "transparent",
+    },
   },
 }));
 // NAVBAR Styles

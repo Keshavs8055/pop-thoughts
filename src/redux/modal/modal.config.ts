@@ -3,6 +3,8 @@ import { IAction } from "../types";
 
 export interface IModalState {
   loginModal: boolean;
+  profileModal: boolean;
+  thoughtModal: boolean;
 }
 
 export const ModalAction = (action: IAction) => {
