@@ -6,6 +6,10 @@ export const Types = {
     CLOSE_ALL: "CLOSE_ALL",
     TOGGLE_THOUGHT_MODAL: "TOGGLE_THOUGHT_MODAL",
   },
+  thoughtTypes: {
+    UPDATE_TITLE: "UPDATE_TITLE",
+    UPDATE_CONTENT: "UPDATE_CONTENT",
+  },
 };
 export interface IAction {
   type: string;

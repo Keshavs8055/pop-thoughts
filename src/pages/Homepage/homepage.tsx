@@ -10,7 +10,7 @@ const Homepage = () => {
       alignItems="flex-start"
       justify="center"
     >
-      <Post />
+      <Post post={{ title: "Title", content: "Some Content" }} />
     </Grid>
   );
 };

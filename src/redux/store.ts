@@ -1,6 +1,8 @@
 import { combineReducers, createStore } from "redux";
 import { ModalReducer } from "./modal/modal.reducer";
-const Reducers = combineReducers({ ModalReducer });
+import { ThoughtReducer } from "./thought/thought.reducer";
+
+const Reducers = combineReducers({ ModalReducer, ThoughtReducer });
 
 //STORE
 export const store = createStore(

@@ -15,11 +15,16 @@ import { Types } from "../../redux/types";
 
 type IAppbar =
   | {
-      variant: "Profile" | "Thought";
+      variant: "Profile";
       closeFunction: () => void;
     }
   | {
       variant: "NavBar ";
+    }
+  | {
+      variant: "Thought";
+      closeFunction: () => void;
+      editMode: boolean;
     };
 
 export const CustomAppBar = (props: IAppbar) => {
@@ -56,9 +61,18 @@ export const CustomAppBar = (props: IAppbar) => {
               </Button>
             ) : (
               <Button
-                onClick={() =>
-                  dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL })
-                }
+                onClick={() => {
+                  dispatch({
+                    type: Types.thoughtTypes.UPDATE_CONTENT,
+                    payload: "",
+                  });
+                  dispatch({
+                    type: Types.thoughtTypes.UPDATE_TITLE,
+                    payload: "",
+                  });
+
+                  dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
+                }}
                 color="secondary"
               >
                 New Thought
@@ -79,7 +93,11 @@ export const CustomAppBar = (props: IAppbar) => {
               maxWidth="900px"
               margin="auto"
             >
-              <Typography variant="h6">Post A New Thought</Typography>
+              {props.editMode ? (
+                <Typography variant="h6">Edit Your Thought</Typography>
+              ) : (
+                <Typography variant="h6">Post A New Thought</Typography>
+              )}
               <IconButton
                 edge="end"
                 color="secondary"
