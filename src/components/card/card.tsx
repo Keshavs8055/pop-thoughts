@@ -15,11 +15,12 @@ interface IPost {
   post: {
     title: string;
     content: string;
+    liked?: boolean;
   };
 }
 export const Post: React.FC<IPost> = ({ userPost, post }) => {
   const classes = CardStyles();
-  const [liked, Handlelike] = React.useState(false);
+  const [liked, Handlelike] = React.useState(post.liked || false);
   const dispatch = useDispatch();
   const handleEdit = () => {
     dispatch({
@@ -45,10 +46,12 @@ export const Post: React.FC<IPost> = ({ userPost, post }) => {
                 {post.title}
               </Typography>
               {userPost ? (
+                // ONLY VISIBLE TO THE WRITER
                 <IconButton onClick={handleEdit}>
                   <Edit color="secondary" />
                 </IconButton>
               ) : (
+                // BUTTON TAKES THE USER TO PROFILE
                 <Button variant="text">John Doe</Button>
               )}
             </Box>
@@ -57,7 +60,9 @@ export const Post: React.FC<IPost> = ({ userPost, post }) => {
             </Typography>
           </CardContent>
           <CardActions>
+            {/* NO ACTIONS AVAILABLE IF WRITER ACCESS THE THOUGHT */}
             {userPost ? null : (
+              //  ACTIONS FOR LIKING AND REPORTING
               <Box
                 display="flex"
                 justifyContent="space-between"

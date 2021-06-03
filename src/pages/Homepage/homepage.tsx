@@ -10,7 +10,7 @@ const Homepage = () => {
       alignItems="flex-start"
       justify="center"
     >
-      <Post post={{ title: "Title", content: "Some Content" }} />
+      <Post post={{ title: "Title", content: "Some Content", liked: false }} />
     </Grid>
   );
 };

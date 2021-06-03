@@ -9,7 +9,7 @@ function App() {
   return (
     <ThemeProvider theme={Theme}>
       <Grid container>
-        <CustomAppBar variant="NavBar " />
+        <CustomAppBar variant="NavBar" />
         <Homepage />
         <Modals />
       </Grid>

@@ -2,6 +2,7 @@ import { combineReducers, createStore } from "redux";
 import { ModalReducer } from "./modal/modal.reducer";
 import { ThoughtReducer } from "./thought/thought.reducer";
 
+// ROOT REDUCER
 const Reducers = combineReducers({ ModalReducer, ThoughtReducer });
 
 //STORE

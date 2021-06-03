@@ -1,15 +1,9 @@
-import { IAction, Types } from "../types";
-import { IModalState } from "./modal.config";
-
-const INITIAL_STATE = {
-  loginModal: false,
-  profileModal: false,
-  thoughtModal: false,
-};
+import { Types } from "../types";
+import { IModalState, INITIAL_STATE, IModalAction } from "./modal.config";
 
 export const ModalReducer = (
   state: IModalState = INITIAL_STATE,
-  action: IAction
+  action: IModalAction
 ) => {
   switch (action.type) {
     case Types.modalTypes.TOGGLE_LOGIN_MODAL:

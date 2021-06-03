@@ -1,16 +1,9 @@
 import { Types } from "../types";
-import { IThoughtState } from "./thought.config";
-const INITIAL_STATE = {
-  title: "",
-  content: "",
-};
-interface ThoughtAction {
-  type: string;
-  payload: string;
-}
+import { INITIAL_STATE, IThoughtState, IThoughtAction } from "./thought.config";
+
 export const ThoughtReducer = (
   state: IThoughtState = INITIAL_STATE,
-  action: ThoughtAction
+  action: IThoughtAction
 ) => {
   switch (action.type) {
     case Types.thoughtTypes.UPDATE_CONTENT:

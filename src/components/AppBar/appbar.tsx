@@ -7,10 +7,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Close, Person } from "@material-ui/icons";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavStyles } from "../classes";
-// import { State } from "../../redux/store";
 import { Types } from "../../redux/types";
 
 type IAppbar =
@@ -19,7 +17,7 @@ type IAppbar =
       closeFunction: () => void;
     }
   | {
-      variant: "NavBar ";
+      variant: "NavBar";
     }
   | {
       variant: "Thought";
@@ -31,7 +29,7 @@ export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
   const user = useSelector(() => ({ user: true }));
   switch (props.variant) {
-    case "NavBar ":
+    case "NavBar":
       const classes = NavStyles();
 
       return (
@@ -50,16 +48,7 @@ export const CustomAppBar = (props: IAppbar) => {
             <Typography variant="h6" className={classes.title}>
               Pop Thoughts
             </Typography>
-            {!user ? (
-              <Button
-                onClick={() =>
-                  dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL })
-                }
-                color="secondary"
-              >
-                Login
-              </Button>
-            ) : (
+            {user ? (
               <Button
                 onClick={() => {
                   dispatch({
@@ -76,6 +65,15 @@ export const CustomAppBar = (props: IAppbar) => {
                 color="secondary"
               >
                 New Thought
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL })
+                }
+                color="secondary"
+              >
+                Login
               </Button>
             )}
           </Toolbar>
