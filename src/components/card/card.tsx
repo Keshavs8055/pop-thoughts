@@ -5,23 +5,37 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Box, Grid, IconButton } from "@material-ui/core";
-import { Edit, Report, ThumbUp, ThumbUpAltOutlined } from "@material-ui/icons";
+import {
+  Edit,
+  LaunchOutlined,
+  ThumbUp,
+  ThumbUpAltOutlined,
+} from "@material-ui/icons";
 import { CardStyles } from "../classes";
 import { useDispatch } from "react-redux";
 import { Types } from "../../redux/types";
 
-interface IPost {
-  userPost?: boolean;
-  post: {
-    title: string;
-    content: string;
-    liked?: boolean;
-  };
+export interface IPost {
+  title: string;
+  content: string;
+  liked?: boolean;
+  author: string;
+  dateCreated: Date;
+  id: string;
+  likes: number;
+  trimmed: string;
 }
-export const Post: React.FC<IPost> = ({ userPost, post }) => {
+
+interface IPostComp {
+  userPost?: boolean;
+  post: IPost;
+}
+export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
   const classes = CardStyles();
   const [liked, Handlelike] = React.useState(post.liked || false);
   const dispatch = useDispatch();
+  console.log(post);
+
   const handleEdit = () => {
     dispatch({
       type: Types.thoughtTypes.UPDATE_CONTENT,
@@ -52,11 +66,11 @@ export const Post: React.FC<IPost> = ({ userPost, post }) => {
                 </IconButton>
               ) : (
                 // BUTTON TAKES THE USER TO PROFILE
-                <Button variant="text">John Doe</Button>
+                <Button variant="text">{post.author}</Button>
               )}
             </Box>
             <Typography variant="body2" component="p">
-              {post.content}
+              {post.trimmed}
             </Typography>
           </CardContent>
           <CardActions>
@@ -79,7 +93,7 @@ export const Post: React.FC<IPost> = ({ userPost, post }) => {
                   </IconButton>
                 )}
                 <IconButton>
-                  <Report color="secondary" />
+                  <LaunchOutlined color="secondary" />
                 </IconButton>
               </Box>
             )}

@@ -31,22 +31,7 @@ export const ProfileModal: React.FC<IProfileProps> = ({ closeFunction }) => {
           style={{ marginTop: "10px" }}
           alignItems="center"
           justify="space-evenly"
-        >
-          <Post
-            userPost
-            post={{
-              title: "Title",
-              content: "WEll some content who no one cares about.",
-            }}
-          />
-          <Post
-            userPost
-            post={{
-              title: "Title",
-              content: "WEll some content who no one cares about.",
-            }}
-          />
-        </Grid>
+        ></Grid>
       </Box>
     </>
   );
