@@ -62,3 +62,18 @@ export const CardStyles = makeStyles({
     marginBottom: 12,
   },
 });
+// ALERT COMPONENT
+export const AlertStyles = makeStyles((theme) => ({
+  root: {
+    zIndex: 9999,
+    left: "50%",
+    top: "0",
+    transform: "translate(-50%, 0)",
+    minWidth: "30vw",
+    "@media screen and (max-width: 1000px)": {
+      top: "100%",
+      transform: "translate(-50%, -100%)",
+      minWidth: "80vw",
+    },
+  },
+}));

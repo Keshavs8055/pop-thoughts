@@ -4,6 +4,7 @@ import {
   Button,
   IconButton,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { Close, Person } from "@material-ui/icons";
@@ -27,7 +28,7 @@ type IAppbar =
 
 export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
-  const user = useSelector(() => ({ user: true }));
+  const user = useSelector(() => ({ user: null }));
   switch (props.variant) {
     case "NavBar":
       const classes = NavStyles();
@@ -35,20 +36,22 @@ export const CustomAppBar = (props: IAppbar) => {
       return (
         <AppBar position="static">
           <Toolbar>
-            {user ? (
-              <IconButton
-                className={classes.menuButton}
-                onClick={() =>
-                  dispatch({ type: Types.modalTypes.TOGGLE_PROFILE_MODAL })
-                }
-              >
-                <Person color="secondary" />
-              </IconButton>
+            {user.user ? (
+              <Tooltip title="Profile">
+                <IconButton
+                  className={classes.menuButton}
+                  onClick={() =>
+                    dispatch({ type: Types.modalTypes.TOGGLE_PROFILE_MODAL })
+                  }
+                >
+                  <Person color="secondary" />
+                </IconButton>
+              </Tooltip>
             ) : null}
             <Typography variant="h6" className={classes.title}>
               Pop Thoughts
             </Typography>
-            {user ? (
+            {user.user ? (
               <Button
                 onClick={() => {
                   dispatch({

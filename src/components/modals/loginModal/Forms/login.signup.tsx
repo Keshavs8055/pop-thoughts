@@ -107,7 +107,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           </FormControl>
           <Button
             color="secondary"
-            onClick={handleLoginSubmit}
+            onClick={() => handleLoginSubmit({ ...values })}
             variant="contained"
           >
             Login
@@ -168,7 +168,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               <FormHelperText className={classes.helperText}>
                 Password contains atleast a number and a special character
                 (?!@#$%^&*) <br />
-                Pasword must be atleast 8 characters long
+                Pasword must be atleast 8 characters and atmost 16 characters
               </FormHelperText>
             ) : null}
           </FormControl>
@@ -191,7 +191,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
 
           <Button
             color="secondary"
-            onClick={handleSignUpSubmit}
+            onClick={() => handleSignUpSubmit({ ...values })}
             variant="contained"
           >
             Sign-Up

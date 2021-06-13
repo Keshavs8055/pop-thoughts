@@ -11,8 +11,8 @@ export const Types = {
     UPDATE_TITLE: "UPDATE_TITLE",
     UPDATE_CONTENT: "UPDATE_CONTENT",
   },
-  // ERROR TYPES
-  errorTypes: {
-    SET_NEW_ERROR: "SET_NEW_ERROR",
+  // ALERT TYPES
+  alertTypes: {
+    SET_NEW_ALERT: "SET_NEW_ALERT",
   },
 };

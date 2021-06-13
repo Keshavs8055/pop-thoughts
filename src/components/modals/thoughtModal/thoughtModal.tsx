@@ -50,10 +50,24 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
   };
   const handleSubmit = () => {
-    if (errors.thought || errors.title) {
+    if (
+      errors.thought ||
+      errors.title ||
+      title.length < 1 ||
+      content.length < 1
+    ) {
+      dispatch({
+        type: Types.alertTypes.SET_NEW_ALERT,
+        payload: {
+          display: true,
+          type: 0,
+          message: "Check The Values",
+        },
+      });
       setError({ ...errors, formError: true });
       return;
     }
+    console.log(title, content);
   };
 
   return (

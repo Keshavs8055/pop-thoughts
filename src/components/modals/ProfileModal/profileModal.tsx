@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { CustomAppBar } from "../../AppBar/appbar";
-import { Post } from "../../card/card";
+// import { Post } from "../../card/card";
 interface IProfileProps {
   closeFunction: () => boolean;
 }

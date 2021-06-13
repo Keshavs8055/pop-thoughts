@@ -4,10 +4,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Box, Grid, IconButton } from "@material-ui/core";
+import { Box, Grid, IconButton, Tooltip } from "@material-ui/core";
 import {
   Edit,
-  LaunchOutlined,
+  SubjectOutlined,
   ThumbUp,
   ThumbUpAltOutlined,
 } from "@material-ui/icons";
@@ -61,9 +61,11 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
               </Typography>
               {userPost ? (
                 // ONLY VISIBLE TO THE WRITER
-                <IconButton onClick={handleEdit}>
-                  <Edit color="secondary" />
-                </IconButton>
+                <Tooltip title="Edit">
+                  <IconButton onClick={handleEdit}>
+                    <Edit color="secondary" />
+                  </IconButton>
+                </Tooltip>
               ) : (
                 // BUTTON TAKES THE USER TO PROFILE
                 <Button variant="text">{post.author}</Button>
@@ -92,9 +94,11 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                     <ThumbUpAltOutlined color="secondary" />
                   </IconButton>
                 )}
-                <IconButton>
-                  <LaunchOutlined color="secondary" />
-                </IconButton>
+                <Tooltip title="Show Full">
+                  <IconButton>
+                    <SubjectOutlined color="secondary" />
+                  </IconButton>
+                </Tooltip>
               </Box>
             )}
           </CardActions>
