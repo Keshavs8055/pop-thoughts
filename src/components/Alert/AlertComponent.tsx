@@ -15,7 +15,6 @@ export const AlertComponent = () => {
         <Alert
           variant="filled"
           severity={state.type === 0 ? "error" : "success"}
-          color="error"
           onClose={() => {
             dispatch({
               type: Types.alertTypes.SET_NEW_ALERT,

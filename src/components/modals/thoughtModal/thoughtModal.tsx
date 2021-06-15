@@ -5,7 +5,6 @@ import {
   FormControl,
   FormHelperText,
   TextareaAutosize,
-  TextField,
 } from "@material-ui/core";
 import { IModal } from "../modals";
 import { FormStyles } from "../../classes";
@@ -13,35 +12,28 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
+import { postNewThought } from "../../../requests";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
   const [errors, setError] = React.useState({
-    title: false,
     thought: false,
     formError: false,
   });
-  const { title, content } = useSelector(
-    (state: State) => state.ThoughtReducer
-  );
+  const [loading, toggleLoading] = React.useState(false);
+  const { content } = useSelector((state: State) => state.ThoughtReducer);
   const dispatch = useDispatch();
-  const modalEditorMode = title.length > 0 && content.length > 0;
+  const modalEditorMode = useSelector(
+    (state: State) => state.ModalReducer.editModeThought
+  );
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = e.currentTarget;
     switch (name) {
-      case "title":
-        dispatch({ type: Types.thoughtTypes.UPDATE_TITLE, payload: value });
-        if (value.length < 5) {
-          setError({ ...errors, title: true });
-        } else {
-          setError({ ...errors, title: false });
-        }
-        break;
       case "thought":
         dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-        if (value.length < 25) {
+        if (value.length < 200 || value.length > 1000) {
           setError({ ...errors, thought: true });
         } else {
           setError({ ...errors, thought: false });
@@ -50,12 +42,8 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
   };
   const handleSubmit = () => {
-    if (
-      errors.thought ||
-      errors.title ||
-      title.length < 1 ||
-      content.length < 1
-    ) {
+    toggleLoading(true);
+    if (errors.thought || content.length < 1) {
       dispatch({
         type: Types.alertTypes.SET_NEW_ALERT,
         payload: {
@@ -67,7 +55,13 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       setError({ ...errors, formError: true });
       return;
     }
-    console.log(title, content);
+    const trimmedString = `${content.substring(0, 50)}...`;
+    postNewThought({
+      content: content,
+      author: "John Doe",
+      dateCreated: new Date(),
+      trimmed: trimmedString,
+    });
   };
 
   return (
@@ -78,25 +72,6 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         closeFunction={closeFunction}
       />
       <Box width="100%" maxWidth="900px" margin="auto" marginTop={2}>
-        <FormControl className={classes.inputField} fullWidth>
-          <TextField
-            label="Title"
-            name="title"
-            type="text"
-            variant="outlined"
-            color="secondary"
-            autoComplete="off"
-            onChange={handleChange}
-            error={errors.title}
-            value={title}
-          />
-          {errors.title ? (
-            <FormHelperText className={classes.helperText}>
-              People Are Not Gonna Read It With That Title <br />
-              Title Too Short
-            </FormHelperText>
-          ) : null}
-        </FormControl>
         <FormControl className={classes.inputField} fullWidth>
           <TextareaAutosize
             placeholder="Thought.."
@@ -110,16 +85,21 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           />
           {errors.thought ? (
             <FormHelperText className={classes.helperText}>
-              Try To Think Big(Too Short)
+              Try To Think Big(Must be from 200 chars to 1000 chars)
             </FormHelperText>
           ) : null}
         </FormControl>
         {modalEditorMode ? (
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" disabled={loading}>
             Update
           </Button>
         ) : (
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
             Submit
           </Button>
         )}

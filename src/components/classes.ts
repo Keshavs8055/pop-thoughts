@@ -77,3 +77,30 @@ export const AlertStyles = makeStyles((theme) => ({
     },
   },
 }));
+// LOADING STYLE
+export const LoadingStyles = makeStyles((theme) => ({
+  "@keyframes loadingAnim": {
+    "0%": {
+      left: "-90%",
+    },
+    "100%": {
+      left: "100%",
+    },
+  },
+  root: {
+    zIndex: theme.zIndex.drawer + 10,
+    maxHeight: "5px",
+    position: "fixed",
+  },
+  loading: {
+    width: "60vw",
+    background: theme.palette.secondary.main,
+    position: "absolute",
+    left: "-100%",
+    minHeight: "2px",
+    maxHeight: "2px",
+    top: 0,
+    borderRadius: "4px",
+    animation: `$loadingAnim infinite ease-in-out 1.2s`,
+  },
+}));

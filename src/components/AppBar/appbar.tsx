@@ -28,7 +28,7 @@ type IAppbar =
 
 export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
-  const user = useSelector(() => ({ user: null }));
+  const user = useSelector(() => ({ user: "here" }));
   switch (props.variant) {
     case "NavBar":
       const classes = NavStyles();
@@ -54,15 +54,6 @@ export const CustomAppBar = (props: IAppbar) => {
             {user.user ? (
               <Button
                 onClick={() => {
-                  dispatch({
-                    type: Types.thoughtTypes.UPDATE_CONTENT,
-                    payload: "",
-                  });
-                  dispatch({
-                    type: Types.thoughtTypes.UPDATE_TITLE,
-                    payload: "",
-                  });
-
                   dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
                 }}
                 color="secondary"

@@ -1,5 +1,4 @@
 import { store } from "../../../../redux/store";
-import { Types } from "../../../../redux/types";
 
 // INTERFACE
 interface IFormHandlers {
@@ -14,7 +13,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
     case "login":
       if (values.email.length < 1 || values.password.length < 1) {
         dispatch({
-          type: Types.alertTypes.SET_NEW_ALERT,
+          type: "SET_NEW_ALERT",
           payload: {
             message: "Please Fill In All Values",
             display: true,
@@ -31,7 +30,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
         values.fullName.length < 1
       ) {
         dispatch({
-          type: Types.alertTypes.SET_NEW_ALERT,
+          type: "SET_NEW_ALERT",
           payload: {
             message: "Please Fill In All Values",
             display: true,

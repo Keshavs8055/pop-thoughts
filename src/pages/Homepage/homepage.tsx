@@ -1,23 +1,20 @@
 import { Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
-import { getAllThoughts } from "../../requests";
+import { getThoughtsNextPage } from "../../requests";
 import { Post } from "./../../components/card/card";
 import { IPost } from "../../components/card/card";
+import { useSelector } from "react-redux";
+import { State } from "../../redux/store";
+
 const Homepage = () => {
-  const [loading, toggleLoading] = useState<boolean>(true);
-  const [posts, updatePosts] = useState<IPost[]>([]);
   useEffect(() => {
-    getAllThoughts("data")
-      .then((res) => {
-        updatePosts(res);
-      })
-      .then(() => toggleLoading(false))
-      .catch((err) => {
-        console.log(err);
-        toggleLoading(false);
-      });
+    getThoughtsNextPage(1);
   }, []);
+  const posts = useSelector(
+    (state: State) => state.ThoughtsReducer.displayThoughts
+  );
+  const loading = useSelector((state: State) => state.LoadingReducer.loading);
   return (
     <Grid
       container
@@ -25,7 +22,8 @@ const Homepage = () => {
       alignItems="flex-start"
       justify="space-evenly"
     >
-      {loading ? <CustomLoading /> : null}
+      {loading ? <CustomLoading variant="global" /> : null}
+      {/* <CustomLoading variant="global" /> */}
       {posts.length > 0
         ? posts.map((post, i) => {
             return <Post post={{ ...post }} key={i} userPost={false} />;

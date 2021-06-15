@@ -41,9 +41,8 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
       type: Types.thoughtTypes.UPDATE_CONTENT,
       payload: post.content,
     });
-    dispatch({ type: Types.thoughtTypes.UPDATE_TITLE, payload: post.title });
     dispatch({ type: Types.modalTypes.TOGGLE_PROFILE_MODAL });
-    dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
+    dispatch({ type: Types.modalTypes.SET_THOUGHT_EDIT });
   };
   return (
     <Grid item xs={12} sm={8} lg={5}>
@@ -56,9 +55,6 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
               alignItems="center"
               marginBottom={2}
             >
-              <Typography variant="h5" component="h2">
-                {post.title}
-              </Typography>
               {userPost ? (
                 // ONLY VISIBLE TO THE WRITER
                 <Tooltip title="Edit">
@@ -66,10 +62,7 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                     <Edit color="secondary" />
                   </IconButton>
                 </Tooltip>
-              ) : (
-                // BUTTON TAKES THE USER TO PROFILE
-                <Button variant="text">{post.author}</Button>
-              )}
+              ) : null}
             </Box>
             <Typography variant="body2" component="p">
               {post.trimmed}
@@ -85,7 +78,7 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                 alignItems="center"
                 width="100%"
               >
-                {liked ? (
+                {/* {liked ? (
                   <IconButton onClick={() => Handlelike(false)}>
                     <ThumbUp color="secondary" />
                   </IconButton>
@@ -93,7 +86,9 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                   <IconButton onClick={() => Handlelike(true)}>
                     <ThumbUpAltOutlined color="secondary" />
                   </IconButton>
-                )}
+                )} */}
+                <Button variant="text">{post.author}</Button>
+
                 <Tooltip title="Show Full">
                   <IconButton>
                     <SubjectOutlined color="secondary" />

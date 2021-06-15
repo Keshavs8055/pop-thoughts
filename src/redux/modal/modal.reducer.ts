@@ -27,6 +27,14 @@ export const ModalReducer = (
         loginModal: false,
         thoughtModal: !state.thoughtModal,
       };
+    case Types.modalTypes.SET_THOUGHT_EDIT:
+      return {
+        ...state,
+        profileModal: false,
+        loginModal: false,
+        thoughtModal: !state.thoughtModal,
+        editModeThought: true,
+      };
     case Types.modalTypes.CLOSE_ALL:
       return {
         ...state,

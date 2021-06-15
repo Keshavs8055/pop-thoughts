@@ -11,11 +11,6 @@ export const ThoughtReducer = (
         ...state,
         content: action.payload,
       };
-    case Types.thoughtTypes.UPDATE_TITLE:
-      return {
-        ...state,
-        title: action.payload,
-      };
     default:
       return {
         ...state,

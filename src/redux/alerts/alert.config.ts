@@ -1,10 +1,10 @@
-export interface ICustomAlert {
+export interface ICustomState {
   message: string;
-  type: 0 | 1;
+  type: 0 | 1; // 0 = error
   display: boolean;
 }
 export interface IAlertAction {
-  type: string;
+  type: "SET_NEW_ALERT";
   payload: {
     message: string;
     type: 0 | 1;
@@ -12,7 +12,7 @@ export interface IAlertAction {
   };
 }
 
-export const INITIAL_STATE: ICustomAlert = {
+export const INITIAL_STATE: ICustomState = {
   message: "",
   type: 0,
   display: false,

@@ -107,6 +107,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           </FormControl>
           <Button
             color="secondary"
+            disabled={errors.email || errors.password}
             onClick={() => handleLoginSubmit({ ...values })}
             variant="contained"
           >
@@ -191,6 +192,12 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
 
           <Button
             color="secondary"
+            disabled={
+              errors.confirmPassword ||
+              errors.email ||
+              errors.fullName ||
+              errors.password
+            }
             onClick={() => handleSignUpSubmit({ ...values })}
             variant="contained"
           >

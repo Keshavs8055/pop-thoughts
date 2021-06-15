@@ -1,8 +1,8 @@
 import { Types } from "../types";
-import { IAlertAction, ICustomAlert, INITIAL_STATE } from "./alert.config";
+import { IAlertAction, ICustomState, INITIAL_STATE } from "./alert.config";
 
 export const AlertReducer = (
-  state: ICustomAlert = INITIAL_STATE,
+  state: ICustomState = INITIAL_STATE,
   action: IAlertAction
 ) => {
   switch (action.type) {
