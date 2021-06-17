@@ -43,8 +43,6 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
 };
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
-  console.log("LOGIN", data);
-
   checkForValues(data, "login");
 };
 // HANDLE SIGNUP

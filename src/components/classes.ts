@@ -92,10 +92,17 @@ export const LoadingStyles = makeStyles((theme) => ({
     maxHeight: "5px",
     position: "fixed",
   },
+  circularLoadingBox: {
+    width: "100vw",
+    position: "fixed",
+    bottom: 0,
+    left: "50%",
+    transform: "translate(-50%, 0)",
+  },
   loading: {
     width: "60vw",
     background: theme.palette.secondary.main,
-    position: "absolute",
+    position: "fixed",
     left: "-100%",
     minHeight: "2px",
     maxHeight: "2px",

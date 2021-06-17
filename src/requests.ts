@@ -20,18 +20,63 @@ export const getAllThoughts = (type: "data" | "response") =>
       .catch((err) => reject);
   });
 // GET THOUGHTS BY PAGE
-export const getThoughtsNextPage = (page: number) => {
-  axios.get(`/api/thoughts?limit=10,page=${page}`).then((res) => {
-    console.log(res);
-    dispatch({
-      type: "FECTH_NEW",
-      payload: res.data.data,
-    });
-    dispatch({
-      type: "DISABLE_LOADING",
-    });
+export const getThoughtsNextPage = (currentPage: number, limit: number) =>
+  new Promise((resolve, reject) => {
+    const nextPage = currentPage + 1;
+    console.log("NEXT PAGE", nextPage);
+    console.log("LIMIT", limit);
+    let cancel;
+    axios
+      .get(`/api/thoughts?limit=${limit}&page=${nextPage}`, {
+        cancelToken: new axios.CancelToken((c) => (cancel = c)),
+      })
+      .then((res) => {
+        dispatch({
+          type: "SET_LOADING",
+        });
+        return res;
+      })
+      .then((res) => {
+        if (res.data.data.length === 0) {
+          dispatch({
+            type: "SET_NEW_ALERT",
+            payload: {
+              message: "No More Thoughts Available",
+              display: true,
+              type: 0,
+            },
+          });
+          dispatch({
+            type: "DISABLE_LOADING",
+          });
+          resolve(false);
+          throw Error("No More Thoughts Available");
+        }
+        dispatch({
+          type: "FECTH_NEW",
+          payload: res.data.data,
+        });
+        dispatch({
+          type: "DISABLE_LOADING",
+        });
+        resolve(true);
+      })
+      .catch((err) => {
+        if (axios.isCancel(err)) return;
+        dispatch({
+          type: "SET_NEW_ALERT",
+          payload: {
+            message: err.message,
+            display: true,
+            type: 0,
+          },
+        });
+        dispatch({
+          type: "DISABLE_LOADING",
+        });
+        reject(err);
+      });
   });
-};
 // POST NEW THOUGHTS
 interface Thought {
   content: string;
@@ -42,9 +87,6 @@ interface Thought {
 }
 export const postNewThought = (thought: Thought) =>
   new Promise((resolve: (val: any) => any, reject) => {
-    const data = JSON.stringify(thought);
-    console.log(data);
-
     axios
       .post("/api/thoughts", { ...thought })
       .then((res) => {

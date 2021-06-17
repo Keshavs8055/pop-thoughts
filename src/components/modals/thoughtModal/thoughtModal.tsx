@@ -33,7 +33,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     switch (name) {
       case "thought":
         dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-        if (value.length < 200 || value.length > 1000) {
+        if (value.length < 250 || value.length > 1000) {
           setError({ ...errors, thought: true });
         } else {
           setError({ ...errors, thought: false });
@@ -55,7 +55,8 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       setError({ ...errors, formError: true });
       return;
     }
-    const trimmedString = `${content.substring(0, 50)}...`;
+    let len = Math.random() * (300 - 250) + 250;
+    const trimmedString = `${content.substring(0, len)}...`;
     postNewThought({
       content: content,
       author: "John Doe",
@@ -85,7 +86,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           />
           {errors.thought ? (
             <FormHelperText className={classes.helperText}>
-              Try To Think Big(Must be from 200 chars to 1000 chars)
+              Try To Think Big(Must be from 250 chars to 1000 chars)
             </FormHelperText>
           ) : null}
         </FormControl>
