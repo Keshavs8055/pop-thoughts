@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
 import { getThoughtsNextPage } from "../../requests";
@@ -50,23 +50,17 @@ const Homepage = () => {
     });
   }, [currentPage, makeMoreRequests]);
   return (
-    <Grid
-      container
-      alignItems="center"
-      spacing={2}
-      justify="space-evenly"
-      style={{ minHeight: "102vh" }}
-    >
+    <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
-      {/* <CustomLoading variant="global" /> */}
-      {posts.length > 0
-        ? posts.map((post, i) => {
-            return <Post post={{ ...post }} key={i} userPost={false} />;
-          })
-        : null}
+      <Grid container alignItems="center" justify="center" spacing={2}>
+        {posts.length > 0
+          ? posts.map((post, i) => {
+              return <Post post={{ ...post }} key={i} userPost={false} />;
+            })
+          : null}
+      </Grid>
       {postLoading ? <CustomLoading variant="circlular" /> : null}
-      {/* <CustomLoading variant="circlular" /> */}
-    </Grid>
+    </Box>
   );
 };
 export default Homepage;
