@@ -77,7 +77,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               name="email"
               type="email"
               variant="outlined"
-              color="secondary"
+              color="primary"
               autoComplete="off"
               onChange={handleChange}
             ></TextField>
@@ -95,7 +95,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               label="Password"
               type="password"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
             ></TextField>
             {errors.password ? (
@@ -106,7 +106,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             ) : null}
           </FormControl>
           <Button
-            color="secondary"
+            color="primary"
             disabled={errors.email || errors.password}
             onClick={() => handleLoginSubmit({ ...values })}
             variant="contained"
@@ -128,7 +128,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               name="fullName"
               type="name"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
               autoComplete="off"
             ></TextField>
@@ -145,7 +145,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               label="Email"
               type="email"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
               autoComplete="off"
             ></TextField>
@@ -163,7 +163,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               type="password"
               variant="outlined"
               onChange={handleChange}
-              color="secondary"
+              color="primary"
             ></TextField>
             {errors.password ? (
               <FormHelperText className={classes.helperText}>
@@ -181,7 +181,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               variant="outlined"
               name="confirmPassword"
               onChange={handleChange}
-              color="secondary"
+              color="primary"
             ></TextField>
             {errors.confirmPassword ? (
               <FormHelperText className={classes.helperText}>
@@ -191,7 +191,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           </FormControl>
 
           <Button
-            color="secondary"
+            color="primary"
             disabled={
               errors.confirmPassword ||
               errors.email ||

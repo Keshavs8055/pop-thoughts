@@ -4,6 +4,7 @@ import { ThoughtReducer } from "./thought/thought.reducer";
 import { AlertReducer } from "./alerts/alert.reducer";
 import { ThoughtsReducer } from "./displayThoughts/thoughts.reducer";
 import { LoadingReducer } from "./loading/loading.reducer";
+import { ThoughtToDisplay } from "./thoughtToDisplay/display.reducer";
 // ROOT REDUCER
 const Reducers = combineReducers({
   ModalReducer,
@@ -11,6 +12,7 @@ const Reducers = combineReducers({
   AlertReducer,
   ThoughtsReducer,
   LoadingReducer,
+  ThoughtToDisplay,
 });
 
 //STORE

@@ -7,6 +7,7 @@ import { Types } from "../../redux/types";
 import { LoginModal } from "./loginModal/loginModal";
 import { ProfileModal } from "./ProfileModal/profileModal";
 import { ThoughtModal } from "./thoughtModal/thoughtModal";
+import { DisplayThought } from "./displayThought/displayThought";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -22,7 +23,7 @@ export interface IModal {
 // MODAL EXPORT
 export const Modals = () => {
   const state = useSelector((state: State) => state.ModalReducer);
-  const { loginModal, profileModal, thoughtModal } = state;
+  const { loginModal, profileModal, thoughtModal, displayThoughtModal } = state;
   const dispatch = useDispatch();
 
   const handleClose = () => {
@@ -34,13 +35,16 @@ export const Modals = () => {
     <div>
       <Dialog
         fullScreen
-        open={loginModal || profileModal || thoughtModal}
+        open={loginModal || profileModal || thoughtModal || displayThoughtModal}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
         {loginModal ? <LoginModal closeFunction={handleClose} /> : null}
         {thoughtModal ? <ThoughtModal closeFunction={handleClose} /> : null}
         {profileModal ? <ProfileModal closeFunction={handleClose} /> : null}
+        {displayThoughtModal ? (
+          <DisplayThought closeFunction={handleClose} />
+        ) : null}
       </Dialog>
     </div>
   );

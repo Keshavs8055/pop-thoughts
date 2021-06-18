@@ -1,5 +1,7 @@
 import {
   AppBar,
+  BottomNavigation,
+  BottomNavigationAction,
   Box,
   Button,
   IconButton,
@@ -9,10 +11,12 @@ import {
   Typography,
   useScrollTrigger,
 } from "@material-ui/core";
-import { Close, Person } from "@material-ui/icons";
+import { Close, Person, Report, ThumbUpAltOutlined } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavStyles } from "../classes";
 import { Types } from "../../redux/types";
+import { useState } from "react";
+import { UpdatePost } from "../../requests";
 // SCROLL COMPONENT
 interface SlideProps {
   window?: () => Window;
@@ -38,14 +42,24 @@ type IAppbar =
       variant: "NavBar";
     }
   | {
+      variant: "DisplayThought";
+      closeFunction: () => void;
+      author?: string;
+    }
+  | {
       variant: "Thought";
       closeFunction: () => void;
       editMode: boolean;
+    }
+  | {
+      variant: "Bottom-Nav";
     };
 
 export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
-  const user = useSelector(() => ({ user: "here" }));
+  const user = useSelector(() => ({ user: null }));
+  const [nav_value, nav_setValue] = useState(0);
+
   switch (props.variant) {
     case "NavBar":
       const classes = NavStyles();
@@ -151,5 +165,60 @@ export const CustomAppBar = (props: IAppbar) => {
           </Toolbar>
         </AppBar>
       );
+    case "DisplayThought":
+      return (
+        <AppBar position="relative">
+          <Toolbar>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+              maxWidth="900px"
+              margin="auto"
+            >
+              <Typography variant="h6" color="secondary">
+                {props.author}
+              </Typography>
+              <IconButton
+                edge="end"
+                color="secondary"
+                onClick={props.closeFunction}
+                aria-label="close"
+              >
+                <Close />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      );
+    case "Bottom-Nav": {
+      return (
+        <BottomNavigation
+          value={nav_value}
+          showLabels
+          onChange={(event, nav_newValue) => {
+            nav_setValue(nav_newValue);
+          }}
+          style={{
+            marginTop: "10px",
+            minWidth: "500px",
+            position: "absolute",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+          }}
+        >
+          <BottomNavigationAction
+            label="Like"
+            icon={<ThumbUpAltOutlined color="secondary" />}
+            onClick={UpdatePost}
+          />
+          <BottomNavigationAction
+            label="Report"
+            icon={<Report color="secondary" />}
+          />
+        </BottomNavigation>
+      );
+    }
   }
 };

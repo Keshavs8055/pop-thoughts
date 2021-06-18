@@ -23,7 +23,7 @@ export const FormStyles = makeStyles((theme) => ({
     border: `1px solid transparent`,
     transitionDuration: `${theme.transitions.duration.short}`,
     "&:focus": {
-      border: `1px solid ${theme.palette.secondary.main}`,
+      border: `1px solid ${theme.palette.primary.main}`,
     },
     "&:focus::placeholder": {
       color: "transparent",
@@ -104,8 +104,8 @@ export const LoadingStyles = makeStyles((theme) => ({
     background: theme.palette.secondary.main,
     position: "fixed",
     left: "-100%",
-    minHeight: "2px",
-    maxHeight: "2px",
+    minHeight: "3px",
+    maxHeight: "3px",
     top: 0,
     borderRadius: "4px",
     animation: `$loadingAnim infinite ease-in-out 1.2s`,

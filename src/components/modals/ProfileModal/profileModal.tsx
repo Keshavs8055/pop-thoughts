@@ -20,7 +20,7 @@ export const ProfileModal: React.FC<IProfileProps> = ({ closeFunction }) => {
         </Typography>
       </Box>
       <Box
-        width="100%"
+        padding={2}
         maxWidth="900px"
         marginLeft="auto"
         marginRight="auto"

@@ -10,30 +10,37 @@ export const ModalReducer = (
       return {
         ...state,
         loginModal: !state.loginModal,
-        profileModal: false,
-        thoughtModal: false,
+        // profileModal: false,
+        // editModeThought: false,
+        // thoughtModal: false,
+        // displayThoughtModal: { display: false },
       };
     case Types.modalTypes.TOGGLE_PROFILE_MODAL:
       return {
         ...state,
         profileModal: !state.profileModal,
-        loginModal: false,
-        thoughtModal: false,
+        // loginModal: false,
+        // editModeThought: false,
+        // thoughtModal: false,
+        // displayThoughtModal: { display: false },
       };
     case Types.modalTypes.TOGGLE_THOUGHT_MODAL:
       return {
         ...state,
-        profileModal: false,
-        loginModal: false,
         thoughtModal: !state.thoughtModal,
+        // profileModal: false,
+        // editModeThought: false,
+        // loginModal: false,
+        // displayThoughtModal: { display: false },
       };
     case Types.modalTypes.SET_THOUGHT_EDIT:
       return {
         ...state,
-        profileModal: false,
-        loginModal: false,
         thoughtModal: !state.thoughtModal,
         editModeThought: true,
+        // profileModal: false,
+        // loginModal: false,
+        // displayThoughtModal: { display: false },
       };
     case Types.modalTypes.CLOSE_ALL:
       return {
@@ -41,6 +48,17 @@ export const ModalReducer = (
         profileModal: false,
         loginModal: false,
         thoughtModal: false,
+        editModeThought: false,
+        displayThoughtModal: false,
+      };
+    case "DISPLAY_THOUGHT":
+      return {
+        ...state,
+        displayThoughtModal: true,
+        // profileModal: false,
+        // loginModal: false,
+        // thoughtModal: false,
+        // editModeThought: false,
       };
     default:
       return {

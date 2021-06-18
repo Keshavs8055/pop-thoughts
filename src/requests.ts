@@ -78,6 +78,10 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
       });
   });
 // POST NEW THOUGHTS
+export const UpdatePost = () => {
+  console.log("LIKED");
+};
+
 interface Thought {
   content: string;
   trimmed: string;

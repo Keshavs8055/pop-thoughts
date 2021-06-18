@@ -11,6 +11,7 @@ export const ThoughtReducer = (
         ...state,
         content: action.payload,
       };
+
     default:
       return {
         ...state,

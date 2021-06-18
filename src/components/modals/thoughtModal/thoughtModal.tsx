@@ -72,12 +72,12 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         editMode={modalEditorMode}
         closeFunction={closeFunction}
       />
-      <Box width="100%" maxWidth="900px" margin="auto" marginTop={2}>
+      <Box maxWidth="900px" width="96%" margin="2% auto" marginTop={2}>
         <FormControl className={classes.inputField} fullWidth>
           <TextareaAutosize
             placeholder="Thought.."
             name="thought"
-            color="secondary"
+            color="primary"
             rowsMin={9}
             autoComplete="off"
             className={classes.textarea}
@@ -97,7 +97,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         ) : (
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleSubmit}
             disabled={loading}
           >

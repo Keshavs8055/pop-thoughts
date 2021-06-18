@@ -20,9 +20,9 @@ export interface IPost {
   content: string;
   liked?: boolean;
   author: string;
-  dateCreated: Date;
+  dateCreated?: Date;
   id: string;
-  likes: number;
+  likes?: number;
   trimmed: string;
 }
 
@@ -89,7 +89,17 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                 <Button variant="text">{post.author}</Button>
 
                 <Tooltip title="Show Full">
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      dispatch({
+                        type: Types.modalTypes.DISPLAY_THOUGHT,
+                      });
+                      dispatch({
+                        type: Types.displayTypes.SET_THOUGHT_TO_DISPLAY,
+                        payload: post,
+                      });
+                    }}
+                  >
                     <SubjectOutlined color="secondary" />
                   </IconButton>
                 </Tooltip>

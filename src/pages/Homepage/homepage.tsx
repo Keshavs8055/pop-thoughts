@@ -54,6 +54,7 @@ const Homepage = () => {
       container
       alignItems="center"
       spacing={2}
+      justify="space-evenly"
       style={{ minHeight: "102vh" }}
     >
       {loading ? <CustomLoading variant="global" /> : null}
