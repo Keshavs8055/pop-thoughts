@@ -1,9 +1,8 @@
-import { Box, Slide, Snackbar } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../redux/store";
 import { Types } from "../../redux/types";
-import { AlertStyles } from "../classes";
 
 export const AlertComponent = () => {
   const { display, message, type } = useSelector(

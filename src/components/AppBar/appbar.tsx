@@ -92,6 +92,7 @@ export const CustomAppBar = (props: IAppbar) => {
                       dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
                     }}
                     color="secondary"
+                    variant="contained"
                   >
                     New Thought
                   </Button>
@@ -101,6 +102,7 @@ export const CustomAppBar = (props: IAppbar) => {
                       dispatch({ type: Types.modalTypes.TOGGLE_LOGIN_MODAL })
                     }
                     color="secondary"
+                    variant="contained"
                   >
                     Login
                   </Button>

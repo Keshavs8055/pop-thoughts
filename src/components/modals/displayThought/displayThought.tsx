@@ -1,4 +1,5 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Button, ButtonGroup, Typography } from "@material-ui/core";
+import { InfoOutlined, ThumbUpAltOutlined } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { CustomAppBar } from "../../AppBar/appbar";
@@ -28,8 +29,27 @@ export const DisplayThought: React.FC<IDisplayThought> = ({
         <Typography align="center" variant="body1">
           {post.content}
         </Typography>
-
-        <CustomAppBar variant="Bottom-Nav" />
+        <Box
+          width="100%"
+          display="flex"
+          marginTop="10px"
+          justifyContent="center"
+        >
+          <ButtonGroup
+            variant="contained"
+            color="primary"
+            aria-label="text primary button group"
+            size="medium"
+          >
+            <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
+              Like
+            </Button>
+            <Button startIcon={<InfoOutlined color="secondary" />}>
+              Report
+            </Button>
+          </ButtonGroup>
+          {/* <CustomAppBar variant="Bottom-Nav" /> */}
+        </Box>
       </Box>
     </>
   );

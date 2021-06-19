@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { LoadingStyles } from "../classes";
 import { State } from "../../redux/store";

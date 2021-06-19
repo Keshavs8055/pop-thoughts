@@ -37,6 +37,7 @@ export const Theme = createMuiTheme({
     },
     secondary: {
       main: "#ECBA3D",
+      contrastText: "#436228",
     },
     background: {
       paper: "#0a0a0a",
