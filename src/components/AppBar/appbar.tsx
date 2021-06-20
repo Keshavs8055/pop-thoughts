@@ -17,6 +17,7 @@ import { NavStyles } from "../classes";
 import { Types } from "../../redux/types";
 import { useState } from "react";
 import { UpdatePost } from "../../requests";
+import { State } from "../../redux/store";
 // SCROLL COMPONENT
 interface SlideProps {
   window?: () => Window;
@@ -57,7 +58,8 @@ type IAppbar =
 
 export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
-  const user = useSelector(() => ({ user: null }));
+  const user = useSelector((state: State) => state.UserReducer);
+  const userExist = user.exist;
   const [nav_value, nav_setValue] = useState(0);
 
   switch (props.variant) {
@@ -69,7 +71,7 @@ export const CustomAppBar = (props: IAppbar) => {
           <HideOnScroll>
             <AppBar>
               <Toolbar>
-                {user.user ? (
+                {userExist ? (
                   <Tooltip title="Profile">
                     <IconButton
                       className={classes.menuButton}
@@ -86,7 +88,7 @@ export const CustomAppBar = (props: IAppbar) => {
                 <Typography variant="h6" className={classes.title}>
                   Pop Thoughts
                 </Typography>
-                {user.user ? (
+                {userExist ? (
                   <Button
                     onClick={() => {
                       dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });

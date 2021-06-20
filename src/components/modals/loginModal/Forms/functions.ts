@@ -1,4 +1,5 @@
 import { store } from "../../../../redux/store";
+import { UserSignUp } from "../../../../requests";
 
 // INTERFACE
 interface IFormHandlers {
@@ -47,5 +48,26 @@ export const handleLoginSubmit = (data: IFormHandlers) => {
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {
+  const dispatch = store.dispatch;
   checkForValues(data, "signup");
+
+  UserSignUp(data).then((res) => {
+    if (!res) return;
+    const data = { ...res.data.data };
+    dispatch({
+      type: "CLOSE_ALL",
+    });
+    dispatch({
+      type: "SET_NEW_ALERT",
+      payload: {
+        display: true,
+        message: "signed Up Successfully",
+        type: 1,
+      },
+    });
+    dispatch({
+      type: "SIGNUP_USER",
+      payload: { ...data },
+    });
+  });
 };

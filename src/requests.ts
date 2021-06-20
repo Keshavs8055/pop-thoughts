@@ -123,3 +123,39 @@ export const postNewThought = (thought: Thought) =>
         reject(err);
       });
   });
+// USER SIGN UP
+interface IUserData {
+  fullName: string;
+  password: string;
+  email: string;
+}
+
+export const UserSignUp = (signUpData: IUserData) =>
+  new Promise((resolve: (val: any) => any, reject) => {
+    dispatch({
+      type: "SET_LOADING",
+    });
+    axios
+      .post("/api/users/signup", { ...signUpData })
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: "DISABLE_LOADING",
+        });
+        resolve(res);
+      })
+      .catch((err) => {
+        dispatch({
+          type: "SET_NEW_ALERT",
+          payload: {
+            message: err.message,
+            type: 0,
+            display: true,
+          },
+        });
+        dispatch({
+          type: "DISABLE_LOADING",
+        });
+        reject(err);
+      });
+  });

@@ -30,4 +30,7 @@ export const Types = {
   thoughts: {
     FECTH_NEW: "FECTH_NEW",
   },
+  userTypes: {
+    SIGN_UP: "SIGN_UP",
+  },
 };

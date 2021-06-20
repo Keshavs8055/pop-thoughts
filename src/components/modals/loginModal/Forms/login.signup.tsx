@@ -48,11 +48,14 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         setError({ ...errors, fullName: !n_re.test(value) });
         break;
       case "password":
+        console.log(values.password, values.confirmPassword);
+
         let p_re = /^(?=.*[0-9])(?=.*[?!@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,16}$/;
         setError({ ...errors, password: !p_re.test(value) });
         break;
       case "confirmPassword":
         let cp_error = values.password === values.confirmPassword;
+        console.log(values.password, values.confirmPassword);
 
         setError({ ...errors, confirmPassword: !cp_error });
         break;
@@ -160,7 +163,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               error={errors.password}
               label="Password"
               name="password"
-              type="password"
+              // type="password"
               variant="outlined"
               onChange={handleChange}
               color="primary"
@@ -177,7 +180,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             <TextField
               error={errors.confirmPassword}
               label="Confirm Password"
-              type="password"
+              // type="password"
               variant="outlined"
               name="confirmPassword"
               onChange={handleChange}
