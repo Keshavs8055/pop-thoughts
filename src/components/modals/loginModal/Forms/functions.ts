@@ -50,10 +50,9 @@ export const handleLoginSubmit = (data: IFormHandlers) => {
 export const handleSignUpSubmit = (data: IFormHandlers) => {
   const dispatch = store.dispatch;
   checkForValues(data, "signup");
-
   UserSignUp(data).then((res) => {
     if (!res) return;
-    const data = { ...res.data.data };
+
     dispatch({
       type: "CLOSE_ALL",
     });
@@ -61,13 +60,9 @@ export const handleSignUpSubmit = (data: IFormHandlers) => {
       type: "SET_NEW_ALERT",
       payload: {
         display: true,
-        message: "signed Up Successfully",
+        message: "Signed Up Successfully",
         type: 1,
       },
-    });
-    dispatch({
-      type: "SIGNUP_USER",
-      payload: { ...data },
     });
   });
 };

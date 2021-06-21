@@ -45,7 +45,13 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
   };
   return (
     <Grid item xs={12} sm={8} lg={5}>
-      <Box width="100%" position="relative" height="100%" padding={2}>
+      <Box
+        width="100%"
+        position="relative"
+        height="100%"
+        padding={2}
+        // whiteSpace="pre-line"
+      >
         <Card className={classes.root} variant="outlined">
           <CardContent>
             <Box
@@ -53,6 +59,8 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
               justifyContent="space-between"
               alignItems="center"
               marginBottom={2}
+              whiteSpace=""
+              pre-line
             >
               {userPost ? (
                 // ONLY VISIBLE TO THE WRITER
@@ -96,7 +104,7 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
                       });
                       dispatch({
                         type: Types.displayTypes.SET_THOUGHT_TO_DISPLAY,
-                        payload: post,
+                        payload: { ...post },
                       });
                     }}
                   >

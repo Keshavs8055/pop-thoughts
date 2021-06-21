@@ -91,8 +91,14 @@ interface Thought {
 }
 export const postNewThought = (thought: Thought) =>
   new Promise((resolve: (val: any) => any, reject) => {
+    let updatedThought = {
+      ...thought,
+      userId: store.getState().UserReducer._id,
+      content: thought.content.replace("\n", "\n "),
+      trimmed: thought.trimmed.replace("\n", "\n "),
+    };
     axios
-      .post("/api/thoughts", { ...thought })
+      .post("/api/thoughts", { ...updatedThought })
       .then((res) => {
         dispatch({
           type: "UPDATE_CONTENT",
@@ -109,6 +115,9 @@ export const postNewThought = (thought: Thought) =>
             display: true,
           },
         });
+
+        dispatch({ type: "NEW_THOUGHT_ADDED", payload: [res.data.data] });
+
         resolve(res);
       })
       .catch((err) => {
@@ -138,17 +147,22 @@ export const UserSignUp = (signUpData: IUserData) =>
     axios
       .post("/api/users/signup", { ...signUpData })
       .then((res) => {
-        console.log(res);
         dispatch({
           type: "DISABLE_LOADING",
+        });
+        dispatch({
+          type: "SIGNUP_USER",
+          payload: { ...res.data.data },
         });
         resolve(res);
       })
       .catch((err) => {
+        console.log("ERR", { err });
+
         dispatch({
           type: "SET_NEW_ALERT",
           payload: {
-            message: err.message,
+            message: err.response.data.message,
             type: 0,
             display: true,
           },

@@ -7,9 +7,12 @@ export const UserReducer = (
 ) => {
   switch (action.type) {
     case Types.userTypes.SIGN_UP:
+      console.log("IN SIGN_UP", action.payload);
+
       return {
         ...state,
         ...action.payload,
+        exist: true,
       };
     default:
       return {

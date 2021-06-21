@@ -2,11 +2,11 @@ export interface IUserState {
   fullName: string;
   email: string;
   _id: string;
-  exist: boolean;
+  exist?: boolean;
 }
 export interface IUserAction {
   type: "SIGNUP_USER" | "LOGIN_USER";
-  payload: {};
+  payload: IUserState;
 }
 export const INITIAL_STATE: IUserState = {
   fullName: "",

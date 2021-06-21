@@ -61,7 +61,6 @@ export const CustomAppBar = (props: IAppbar) => {
   const user = useSelector((state: State) => state.UserReducer);
   const userExist = user.exist;
   const [nav_value, nav_setValue] = useState(0);
-
   switch (props.variant) {
     case "NavBar":
       const classes = NavStyles();

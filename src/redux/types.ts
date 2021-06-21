@@ -15,6 +15,7 @@ export const Types = {
   // THOUGHT TO DISPLAY
   displayTypes: {
     SET_THOUGHT_TO_DISPLAY: "SET_THOUGHT_TO_DISPLAY",
+    NEW_THOUGHT_ADDED: "NEW_THOUGHT_ADDED",
   },
   // ALERT TYPES
   alertTypes: {
@@ -31,6 +32,6 @@ export const Types = {
     FECTH_NEW: "FECTH_NEW",
   },
   userTypes: {
-    SIGN_UP: "SIGN_UP",
+    SIGN_UP: "SIGNUP_USER",
   },
 };

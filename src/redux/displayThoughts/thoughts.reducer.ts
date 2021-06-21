@@ -14,7 +14,10 @@ export const ThoughtsReducer = (
       return {
         displayThoughts: [...state.displayThoughts, ...action.payload],
       };
-
+    case Types.displayTypes.NEW_THOUGHT_ADDED:
+      return {
+        displayThoughts: [action.payload, ...state.displayThoughts],
+      };
     default:
       return {
         ...state,

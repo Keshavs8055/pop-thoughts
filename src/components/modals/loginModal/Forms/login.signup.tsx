@@ -33,11 +33,11 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   //**************
   //INPUT CHANGE
   //**************
-  const handleChange = (
+  const handleChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = e.currentTarget;
-    setValue({ ...values, [name]: value });
+    await setValue({ ...values, [name]: value });
     switch (name) {
       case "email":
         let re = /\S+@\S+\.\S+/;
@@ -54,10 +54,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         setError({ ...errors, password: !p_re.test(value) });
         break;
       case "confirmPassword":
-        let cp_error = values.password === values.confirmPassword;
-        console.log(values.password, values.confirmPassword);
-
-        setError({ ...errors, confirmPassword: !cp_error });
+        setError({ ...errors, confirmPassword: false });
         break;
       default:
         return true;
@@ -201,7 +198,11 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               errors.fullName ||
               errors.password
             }
-            onClick={() => handleSignUpSubmit({ ...values })}
+            onClick={() => {
+              if (values.confirmPassword !== values.password)
+                setError({ ...errors, confirmPassword: true });
+              handleSignUpSubmit({ ...values });
+            }}
             variant="contained"
           >
             Sign-Up

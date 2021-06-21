@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Typography } from "@material-ui/core";
 import { InfoOutlined, ThumbUpAltOutlined } from "@material-ui/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { CustomAppBar } from "../../AppBar/appbar";
 
@@ -12,6 +12,8 @@ export const DisplayThought: React.FC<IDisplayThought> = ({
   closeFunction,
 }) => {
   const post = useSelector((state: State) => state.ThoughtToDisplay);
+  const { exist } = useSelector((state: State) => state.UserReducer);
+  const dispatch = useDispatch();
   return (
     <>
       <CustomAppBar
@@ -25,6 +27,7 @@ export const DisplayThought: React.FC<IDisplayThought> = ({
         marginRight="auto"
         marginTop={2}
         padding={2}
+        whiteSpace="pre-line"
       >
         <Typography align="center" variant="body1">
           {post.content}
@@ -41,12 +44,25 @@ export const DisplayThought: React.FC<IDisplayThought> = ({
             aria-label="text primary button group"
             size="medium"
           >
-            <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
-              Like
-            </Button>
-            <Button startIcon={<InfoOutlined color="secondary" />}>
-              Report
-            </Button>
+            {exist ? (
+              <>
+                <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
+                  Like
+                </Button>
+                <Button startIcon={<InfoOutlined color="secondary" />}>
+                  Report
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={() => {
+                  dispatch({ type: "CLOSE_ALL" });
+                  dispatch({ type: "TOGGLE_LOGIN_MODAL" });
+                }}
+              >
+                Login For More Options
+              </Button>
+            )}
           </ButtonGroup>
           {/* <CustomAppBar variant="Bottom-Nav" /> */}
         </Box>
