@@ -124,7 +124,8 @@ export const CustomAppBar = (props: IAppbar) => {
               justifyContent="space-between"
               width="100%"
               maxWidth="900px"
-              margin="auto"
+              marginY="auto"
+              marginX="0"
             >
               {props.editMode ? (
                 <Typography variant="h6">Edit Your Thought</Typography>
