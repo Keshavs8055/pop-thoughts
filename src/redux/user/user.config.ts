@@ -5,7 +5,7 @@ export interface IUserState {
   exist?: boolean;
 }
 export interface IUserAction {
-  type: "SIGNUP_USER" | "LOGIN_USER";
+  type: "SET_USER";
   payload: IUserState;
 }
 export const INITIAL_STATE: IUserState = {

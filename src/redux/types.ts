@@ -32,6 +32,6 @@ export const Types = {
     FECTH_NEW: "FECTH_NEW",
   },
   userTypes: {
-    SIGN_UP: "SIGNUP_USER",
+    SET_USER: "SET_USER",
   },
 };

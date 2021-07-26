@@ -38,32 +38,30 @@ export const DisplayThought: React.FC<IDisplayThought> = ({
           marginTop="10px"
           justifyContent="center"
         >
-          <ButtonGroup
-            variant="contained"
-            color="primary"
-            aria-label="text primary button group"
-            size="medium"
-          >
-            {exist ? (
-              <>
-                <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
-                  Like
-                </Button>
-                <Button startIcon={<InfoOutlined color="secondary" />}>
-                  Report
-                </Button>
-              </>
-            ) : (
-              <Button
-                onClick={() => {
-                  dispatch({ type: "CLOSE_ALL" });
-                  dispatch({ type: "TOGGLE_LOGIN_MODAL" });
-                }}
-              >
-                Login For More Options
+          {exist ? (
+            <ButtonGroup
+              variant="contained"
+              color="primary"
+              aria-label="text primary button group"
+              size="medium"
+            >
+              <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
+                Like
               </Button>
-            )}
-          </ButtonGroup>
+              <Button startIcon={<InfoOutlined color="secondary" />}>
+                Report
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <Button
+              onClick={() => {
+                dispatch({ type: "CLOSE_ALL" });
+                dispatch({ type: "TOGGLE_LOGIN_MODAL" });
+              }}
+            >
+              Login For More Options
+            </Button>
+          )}
           {/* <CustomAppBar variant="Bottom-Nav" /> */}
         </Box>
       </Box>

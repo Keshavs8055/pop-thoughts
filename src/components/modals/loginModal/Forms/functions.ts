@@ -1,5 +1,5 @@
 import { store } from "../../../../redux/store";
-import { UserSignUp } from "../../../../requests";
+import { UserLogin, UserSignUp } from "../../../../requests";
 
 // INTERFACE
 interface IFormHandlers {
@@ -45,6 +45,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
   checkForValues(data, "login");
+  UserLogin({ email: data.email, password: data.password });
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {

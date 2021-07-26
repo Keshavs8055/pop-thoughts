@@ -1,7 +1,23 @@
 import axios from "axios";
 import { store } from "./redux/store";
+import { verify } from "jsonwebtoken";
+import { IUserState } from "./redux/user/user.config";
 
 const { dispatch } = store;
+
+export const RequestErrorHandler = (msg: string) => {
+  dispatch({
+    type: "SET_NEW_ALERT",
+    payload: {
+      message: msg,
+      display: true,
+      type: 0,
+    },
+  });
+  dispatch({
+    type: "DISABLE_LOADING",
+  });
+};
 
 export const getAllThoughts = (type: "data" | "response") =>
   new Promise((resolve: (val: any) => any, reject) => {
@@ -28,6 +44,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
     let cancel;
     axios
       .get(`/api/thoughts?limit=${limit}&page=${nextPage}`, {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         cancelToken: new axios.CancelToken((c) => (cancel = c)),
       })
       .then((res) => {
@@ -38,17 +55,8 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
       })
       .then((res) => {
         if (res.data.data.length === 0) {
-          dispatch({
-            type: "SET_NEW_ALERT",
-            payload: {
-              message: "No More Thoughts Available",
-              display: true,
-              type: 0,
-            },
-          });
-          dispatch({
-            type: "DISABLE_LOADING",
-          });
+          RequestErrorHandler("No More Thoughts Available");
+
           resolve(false);
           throw Error("No More Thoughts Available");
         }
@@ -63,17 +71,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
       })
       .catch((err) => {
         if (axios.isCancel(err)) return;
-        dispatch({
-          type: "SET_NEW_ALERT",
-          payload: {
-            message: err.message,
-            display: true,
-            type: 0,
-          },
-        });
-        dispatch({
-          type: "DISABLE_LOADING",
-        });
+        RequestErrorHandler(err.message);
         reject(err);
       });
   });
@@ -121,14 +119,7 @@ export const postNewThought = (thought: Thought) =>
         resolve(res);
       })
       .catch((err) => {
-        dispatch({
-          type: "SET_NEW_ALERT",
-          payload: {
-            message: "Error While Posting Thought",
-            type: 0,
-            display: true,
-          },
-        });
+        RequestErrorHandler("Error While Posting Thought");
         reject(err);
       });
   });
@@ -150,26 +141,82 @@ export const UserSignUp = (signUpData: IUserData) =>
         dispatch({
           type: "DISABLE_LOADING",
         });
-        dispatch({
-          type: "SIGNUP_USER",
-          payload: { ...res.data.data },
-        });
+        console.log(res.data);
+
+        // dispatch({
+        //   type: "SIGNUP_USER",
+        //   payload: { ...res.data.data },
+        // });
         resolve(res);
       })
       .catch((err) => {
         console.log("ERR", { err });
-
-        dispatch({
-          type: "SET_NEW_ALERT",
-          payload: {
-            message: err.response.data.message,
-            type: 0,
-            display: true,
-          },
-        });
-        dispatch({
-          type: "DISABLE_LOADING",
-        });
+        RequestErrorHandler(err.response.data.message);
         reject(err);
       });
+  });
+
+interface ILoginData {
+  email: string;
+  password: string;
+}
+export const UserLogin = (loginData: ILoginData) => {
+  axios
+    .post("/api/users/login", {
+      email: loginData.email,
+      password: loginData.password,
+    })
+    .then((res) => {
+      const decoded: any = verify(
+        res.data.token,
+        process.env.REACT_APP_JWT_SECRET as string
+      );
+      const userId = decoded.id;
+      getUser(userId)
+        .then((user: IUserState) => {
+          console.log(user);
+
+          dispatch({
+            type: "SET_USER",
+            payload: {
+              fullName: user.fullName,
+              _id: user._id,
+              email: user.email,
+              exist: true,
+            },
+          });
+          dispatch({
+            type: "SET_NEW_ALERT",
+            payload: {
+              display: true,
+              message: "Successfully Signed In",
+              type: 1,
+            },
+          });
+          dispatch({
+            type: "CLOSE_ALL",
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          RequestErrorHandler(e.response.data.message);
+        });
+    })
+    .catch((e) => {
+      console.log(e);
+
+      RequestErrorHandler(e.response.data.message);
+    });
+};
+
+const getUser = (id: string) =>
+  new Promise((resolve: (val: any) => any, reject) => {
+    axios
+      .get(`/api/users/${id}`)
+      .then(async (res) => {
+        const data = await res;
+
+        resolve(data.data.data);
+      })
+      .catch((e) => reject(e));
   });
