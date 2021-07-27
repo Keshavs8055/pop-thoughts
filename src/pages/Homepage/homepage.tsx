@@ -1,7 +1,7 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
-import { getThoughtsNextPage } from "../../requests";
+import { getThoughtsNextPage } from "../../utils/requests";
 import { Post } from "./../../components/card/card";
 import { useSelector } from "react-redux";
 import { State } from "../../redux/store";

@@ -1,5 +1,5 @@
 import { store } from "../../../../redux/store";
-import { UserLogin, UserSignUp } from "../../../../requests";
+import { UserLogin, UserSignUp } from "../../../../utils/requests";
 
 // INTERFACE
 interface IFormHandlers {
@@ -21,6 +21,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
+        dispatch({ type: "DISABLE_LOADING" });
       }
       break;
     case "signup":
@@ -38,18 +39,21 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
+        dispatch({ type: "DISABLE_LOADING" });
       }
       break;
   }
 };
+const dispatch = store.dispatch;
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
+  dispatch({ type: "SET_LOADING" });
   checkForValues(data, "login");
   UserLogin({ email: data.email, password: data.password });
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {
-  const dispatch = store.dispatch;
+  dispatch({ type: "SET_LOADING" });
   checkForValues(data, "signup");
   UserSignUp(data).then((res) => {
     if (!res) return;

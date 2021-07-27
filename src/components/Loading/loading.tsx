@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { LoadingStyles } from "../classes";
+import { LoadingStyles } from "../../utils/classes";
 import { State } from "../../redux/store";
 interface ILoading {
   variant: "global" | "circlular";
@@ -23,7 +23,13 @@ export const CustomLoading: React.FC<ILoading> = ({ variant }) => {
     case "global":
       if (GlobalDisplay) {
         return (
-          <Box position="fixed" top="0" width="100vw" className={classes.root}>
+          <Box
+            position="fixed"
+            top="0"
+            width="100vw"
+            zIndex="10"
+            className={classes.root}
+          >
             <div className={classes.loading}></div>
           </Box>
         );

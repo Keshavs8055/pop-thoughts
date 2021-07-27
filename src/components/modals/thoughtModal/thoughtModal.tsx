@@ -7,12 +7,12 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { IModal } from "../modals";
-import { FormStyles } from "../../classes";
+import { FormStyles } from "../../../utils/classes";
 import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import { postNewThought } from "../../../requests";
+import { postNewThought } from "../../../utils/requests";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();

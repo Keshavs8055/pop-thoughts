@@ -15,6 +15,17 @@ export const LoadingReducer = (
       return {
         ...state,
         loading: false,
+        loginLoading: false,
+      };
+    case Types.loading.LOGIN_LOADING:
+      return {
+        ...state,
+        loginLoading: true,
+      };
+    case Types.loading.DISABLE_LOGIN_LOADING:
+      return {
+        ...state,
+        loginLoading: false,
       };
     default:
       return {

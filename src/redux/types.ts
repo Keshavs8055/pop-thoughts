@@ -16,6 +16,7 @@ export const Types = {
   displayTypes: {
     SET_THOUGHT_TO_DISPLAY: "SET_THOUGHT_TO_DISPLAY",
     NEW_THOUGHT_ADDED: "NEW_THOUGHT_ADDED",
+    DISPLAY_USER_THOUGHTS: "DISPLAY_USER_THOUGHTS",
   },
   // ALERT TYPES
   alertTypes: {
@@ -26,6 +27,8 @@ export const Types = {
   loading: {
     SET_LOADING: "SET_LOADING",
     DISABLE_LOADING: "DISABLE_LOADING",
+    LOGIN_LOADING: "LOGIN_LOADING",
+    DISABLE_LOGIN_LOADING: "DISABLE_LOGIN_LOADING",
   },
   // THOUGHTS
   thoughts: {

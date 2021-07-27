@@ -8,10 +8,10 @@ import { Box, Grid, IconButton, Tooltip } from "@material-ui/core";
 import {
   Edit,
   SubjectOutlined,
-  ThumbUp,
-  ThumbUpAltOutlined,
+  // ThumbUp,
+  // ThumbUpAltOutlined,
 } from "@material-ui/icons";
-import { CardStyles } from "../classes";
+import { CardStyles } from "../../utils/classes";
 import { useDispatch } from "react-redux";
 import { Types } from "../../redux/types";
 
@@ -32,7 +32,7 @@ interface IPostComp {
 }
 export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
   const classes = CardStyles();
-  const [liked, Handlelike] = React.useState(post.liked || false);
+  // const [liked, Handlelike] = React.useState(post.liked || false);
   const dispatch = useDispatch();
 
   const handleEdit = () => {

@@ -6,8 +6,12 @@ import {
   TextField,
 } from "@material-ui/core";
 import React from "react";
-import { FormStyles } from "../../../classes";
+import { useDispatch, useSelector } from "react-redux";
+import { FormStyles } from "../../../../utils/classes";
 import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
+import { State } from "../../../../redux/store";
+import { CustomLoading } from "../../../Loading/loading";
+import { Types } from "../../../../redux/types";
 
 type IMainForm = {
   variant: "login" | "signup";
@@ -30,6 +34,10 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
     fullName: "",
     confirmPassword: "",
   });
+  const btnLoading = useSelector(
+    (state: State) => state.LoadingReducer.loading
+  );
+  const dispatch = useDispatch();
   //**************
   //INPUT CHANGE
   //**************
@@ -38,6 +46,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   ) => {
     const { name, value } = e.currentTarget;
     await setValue({ ...values, [name]: value });
+    dispatch({ type: Types.loading.DISABLE_LOADING });
     switch (name) {
       case "email":
         let re = /\S+@\S+\.\S+/;
@@ -107,12 +116,15 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           </FormControl>
           <Button
             color="primary"
-            disabled={errors.email || errors.password}
-            onClick={() => handleLoginSubmit({ ...values })}
+            disabled={errors.email || errors.password || btnLoading}
+            onClick={() => {
+              handleLoginSubmit({ ...values });
+            }}
             variant="contained"
           >
             Login
           </Button>
+          {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );
     case "signup":
@@ -196,7 +208,8 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               errors.confirmPassword ||
               errors.email ||
               errors.fullName ||
-              errors.password
+              errors.password ||
+              btnLoading
             }
             onClick={() => {
               if (values.confirmPassword !== values.password)
@@ -207,6 +220,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           >
             Sign-Up
           </Button>
+          {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );
   }

@@ -1,7 +1,8 @@
 import axios from "axios";
-import { store } from "./redux/store";
+import { store } from "../redux/store";
 import { verify } from "jsonwebtoken";
-import { IUserState } from "./redux/user/user.config";
+import { IUserState } from "../redux/user/user.config";
+import { UserReduxAction } from "../redux/actions.dispatch";
 
 const { dispatch } = store;
 
@@ -39,8 +40,6 @@ export const getAllThoughts = (type: "data" | "response") =>
 export const getThoughtsNextPage = (currentPage: number, limit: number) =>
   new Promise((resolve, reject) => {
     const nextPage = currentPage + 1;
-    console.log("NEXT PAGE", nextPage);
-    console.log("LIMIT", limit);
     let cancel;
     axios
       .get(`/api/thoughts?limit=${limit}&page=${nextPage}`, {
@@ -96,7 +95,15 @@ export const postNewThought = (thought: Thought) =>
       trimmed: thought.trimmed.replace("\n", "\n "),
     };
     axios
-      .post("/api/thoughts", { ...updatedThought })
+      .post(
+        "/api/thoughts",
+        { ...updatedThought },
+        {
+          headers: {
+            authorization: "bearer col",
+          },
+        }
+      )
       .then((res) => {
         dispatch({
           type: "UPDATE_CONTENT",
@@ -138,15 +145,16 @@ export const UserSignUp = (signUpData: IUserData) =>
     axios
       .post("/api/users/signup", { ...signUpData })
       .then((res) => {
-        dispatch({
-          type: "DISABLE_LOADING",
-        });
-        console.log(res.data);
-
-        // dispatch({
-        //   type: "SIGNUP_USER",
-        //   payload: { ...res.data.data },
-        // });
+        const user = res.data.data.user;
+        UserReduxAction(
+          {
+            fullName: user.fullName,
+            _id: user._id,
+            email: user.email,
+            exist: true,
+          },
+          "Signup"
+        );
         resolve(res);
       })
       .catch((err) => {
@@ -174,28 +182,15 @@ export const UserLogin = (loginData: ILoginData) => {
       const userId = decoded.id;
       getUser(userId)
         .then((user: IUserState) => {
-          console.log(user);
-
-          dispatch({
-            type: "SET_USER",
-            payload: {
+          UserReduxAction(
+            {
               fullName: user.fullName,
               _id: user._id,
               email: user.email,
               exist: true,
             },
-          });
-          dispatch({
-            type: "SET_NEW_ALERT",
-            payload: {
-              display: true,
-              message: "Successfully Signed In",
-              type: 1,
-            },
-          });
-          dispatch({
-            type: "CLOSE_ALL",
-          });
+            "Login"
+          );
         })
         .catch((e) => {
           console.log(e);
@@ -220,3 +215,18 @@ const getUser = (id: string) =>
       })
       .catch((e) => reject(e));
   });
+
+export const GetUserThoughts = () => {
+  const id = store.getState().UserReducer._id;
+  axios
+    .get(`/api/users/thoughts/${id}`)
+    .then((res) => {
+      console.log("CALL SUCCESS ", res.data.data.thoughts);
+
+      dispatch({
+        type: "DISPLAY_USER_THOUGHTS",
+        payload: res.data.data.thoughts,
+      });
+    })
+    .catch((e) => console.log(e));
+};

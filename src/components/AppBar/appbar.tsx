@@ -13,10 +13,10 @@ import {
 } from "@material-ui/core";
 import { Close, Person, Report, ThumbUpAltOutlined } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { NavStyles } from "../classes";
+import { NavStyles } from "../../utils/classes";
 import { Types } from "../../redux/types";
 import { useState } from "react";
-import { UpdatePost } from "../../requests";
+import { GetUserThoughts, UpdatePost } from "../../utils/requests";
 import { State } from "../../redux/store";
 // SCROLL COMPONENT
 interface SlideProps {
@@ -74,11 +74,12 @@ export const CustomAppBar = (props: IAppbar) => {
                   <Tooltip title="Profile">
                     <IconButton
                       className={classes.menuButton}
-                      onClick={() =>
+                      onClick={() => {
+                        GetUserThoughts();
                         dispatch({
                           type: Types.modalTypes.TOGGLE_PROFILE_MODAL,
-                        })
-                      }
+                        });
+                      }}
                     >
                       <Person color="secondary" />
                     </IconButton>

@@ -108,6 +108,7 @@ export const LoadingStyles = makeStyles((theme) => ({
     maxHeight: "3px",
     top: 0,
     borderRadius: "4px",
-    animation: `$loadingAnim infinite ease-in-out 1.2s`,
+    animation: `$loadingAnim infinite ease-in-out 0.4s`,
+    zIndex: 10,
   },
 }));
