@@ -23,7 +23,7 @@ export const ThoughtsReducer = (
     case Types.displayTypes.DISPLAY_USER_THOUGHTS:
       return {
         ...state,
-        userDisplayThoughts: [...state.userDisplayThoughts, ...action.payload],
+        userDisplayThoughts: [...action.payload],
       };
     default:
       return {

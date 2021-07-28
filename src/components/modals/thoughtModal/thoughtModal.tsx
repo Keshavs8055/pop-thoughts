@@ -59,7 +59,6 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     const trimmedString = `${content.substring(0, len)}...`;
     postNewThought({
       content: content,
-      author: "John Doe",
       dateCreated: new Date(),
       trimmed: trimmedString,
     });

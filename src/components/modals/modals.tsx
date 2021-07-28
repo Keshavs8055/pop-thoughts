@@ -23,10 +23,20 @@ export interface IModal {
 // MODAL EXPORT
 export const Modals = () => {
   const state = useSelector((state: State) => state.ModalReducer);
-  const { loginModal, profileModal, thoughtModal, displayThoughtModal } = state;
+  const {
+    loginModal,
+    profileModal,
+    thoughtModal,
+    displayThoughtModal,
+    editModeThought,
+  } = state;
   const dispatch = useDispatch();
 
   const handleClose = () => {
+    if (editModeThought) {
+      dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
+      return true;
+    }
     dispatch({ type: Types.modalTypes.CLOSE_ALL });
     return true;
   };

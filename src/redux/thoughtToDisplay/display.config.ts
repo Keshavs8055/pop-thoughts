@@ -1,13 +1,12 @@
-import { IPost } from "../../components/card/card";
+import { IThought } from "../../utils/interfaces";
 
-export const INITIAL_STATE: IPost = {
+export const INITIAL_STATE: IThought = {
   author: "",
   content: "",
   id: "",
-  title: "",
   trimmed: "",
 };
 export interface IThoughtAction {
   type: "SET_THOUGHT_TO_DISPLAY";
-  payload: IPost;
+  payload: IThought;
 }

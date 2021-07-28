@@ -17,6 +17,7 @@ const Homepage = () => {
   );
   const loading = useSelector((state: State) => state.LoadingReducer.loading);
 
+  // SCROLL HANDLER
   useEffect(() => {
     const HandleScroll = (e: any) => {
       let call = true;
@@ -32,6 +33,7 @@ const Homepage = () => {
     window.addEventListener("scroll", HandleScroll);
     return () => window.removeEventListener("scroll", HandleScroll);
   }, [makeMoreRequests]);
+
   useEffect(() => {
     togglePostLoading(true);
     if (!makeMoreRequests) {

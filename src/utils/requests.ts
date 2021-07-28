@@ -78,6 +78,7 @@ export const UpdatePost = () => {
 
 export const postNewThought = (thought: IThought) =>
   new Promise((resolve: (val: any) => any, reject) => {
+    thought.author = store.getState().UserReducer.fullName;
     let updatedThought = {
       ...thought,
       userId: store.getState().UserReducer._id,
@@ -196,16 +197,17 @@ const getUser = (id: string) =>
   });
 
 export const GetUserThoughts = () => {
+  loadingDispatch("START");
+
   const id = store.getState().UserReducer._id;
   axios
     .get(`/api/users/thoughts/${id}`)
     .then((res) => {
-      console.log("CALL SUCCESS ", res.data.data.thoughts);
-
       dispatch({
         type: "DISPLAY_USER_THOUGHTS",
         payload: res.data.data.thoughts,
       });
+      loadingDispatch("DISABLE");
     })
     .catch((e) => console.log(e));
 };

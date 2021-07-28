@@ -123,7 +123,7 @@ export const CustomAppBar = (props: IAppbar) => {
               width="100%"
               maxWidth="900px"
               marginY="auto"
-              marginX="0"
+              marginX="auto"
             >
               {props.editMode ? (
                 <Typography variant="h6">Edit Your Thought</Typography>

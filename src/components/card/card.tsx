@@ -40,21 +40,18 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
               alignItems="center"
               marginBottom={2}
               whiteSpace="pre-line"
-            >
-              {userPost ? (
-                // ONLY VISIBLE TO THE WRITER
-                <Tooltip title="Edit">
-                  <IconButton onClick={handleEdit}>
-                    <Edit color="secondary" />
-                  </IconButton>
-                </Tooltip>
-              ) : null}
-            </Box>
+            ></Box>
             <Typography variant="body2" component="p">
               {post.trimmed}
             </Typography>
           </CardContent>
           <CardActions>
+            {userPost ? (
+              // ONLY VISIBLE TO THE WRITER
+              <Button onClick={handleEdit} variant="outlined" color="secondary">
+                Edit
+              </Button>
+            ) : null}
             {/* NO ACTIONS AVAILABLE IF WRITER ACCESS THE THOUGHT */}
             {userPost ? null : (
               //  ACTIONS FOR LIKING AND REPORTING

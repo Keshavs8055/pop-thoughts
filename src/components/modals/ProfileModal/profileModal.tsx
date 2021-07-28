@@ -1,26 +1,21 @@
 import { Box, Grid, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { CustomAppBar } from "../../AppBar/appbar";
 // import { Post } from "../../card/card";
 import { State } from "../../../redux/store";
 import { CustomLoading } from "../../Loading/loading";
 import { IModalProps } from "../../../utils/interfaces";
+import { Post } from "../../card/card";
 
 export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
   // GET STATE
   const User = useSelector((state: State) => state.UserReducer);
-  const thoughts = useSelector(
+  const posts = useSelector(
     (state: State) => state.ThoughtsReducer.userDisplayThoughts
   );
   // LOADING STATE
-  const [loading, toggleLoading] = useState<boolean>(true);
-
-  // HANDLE LOADING
-  useEffect(() => {
-    toggleLoading(false);
-    console.log("PROFILE ", thoughts);
-  }, [thoughts]);
+  const loading = useSelector((state: State) => state.LoadingReducer.loading);
 
   // COMPONENT
   return (
@@ -48,7 +43,13 @@ export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
           alignItems="center"
           justify="space-evenly"
         >
-          {loading ? <CustomLoading variant="circlular" /> : null}
+          {posts.length > 0 ? (
+            posts.map((post, i) => {
+              return <Post post={{ ...post }} key={i} userPost={true} />;
+            })
+          ) : loading ? (
+            <CustomLoading variant="circlular" />
+          ) : null}
         </Grid>
       </Box>
     </>
