@@ -9,7 +9,7 @@ export interface IThought {
   liked?: boolean;
   author: string;
   dateCreated?: Date;
-  id: string;
+  id?: string;
   likes?: number;
   trimmed: string;
 }
@@ -42,8 +42,7 @@ export interface ITabPanel {
 }
 // USER DATA
 export interface IUserData {
-    fullName?: string;
-    password: string;
-    email: string;
-  }
-  
+  fullName?: string;
+  password: string;
+  email: string;
+}
