@@ -1,13 +1,8 @@
+import { loadingDispatch } from "../../../../redux/loading/loading.config";
 import { store } from "../../../../redux/store";
+import { IFormHandlers } from "../../../../utils/interfaces";
 import { UserLogin, UserSignUp } from "../../../../utils/requests";
 
-// INTERFACE
-interface IFormHandlers {
-  password: string;
-  email: string;
-  fullName: "" | string;
-  confirmPassword: "" | string;
-}
 const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
   const dispatch = store.dispatch;
   switch (type) {
@@ -21,7 +16,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
-        dispatch({ type: "DISABLE_LOADING" });
+        loadingDispatch("DISABLE");
       }
       break;
     case "signup":
@@ -39,7 +34,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
-        dispatch({ type: "DISABLE_LOADING" });
+        loadingDispatch("DISABLE");
       }
       break;
   }
@@ -47,13 +42,14 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
 const dispatch = store.dispatch;
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
-  dispatch({ type: "SET_LOADING" });
+  loadingDispatch("START");
   checkForValues(data, "login");
   UserLogin({ email: data.email, password: data.password });
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {
-  dispatch({ type: "SET_LOADING" });
+  loadingDispatch("START");
+
   checkForValues(data, "signup");
   UserSignUp(data).then((res) => {
     if (!res) return;

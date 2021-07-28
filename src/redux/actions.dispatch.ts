@@ -1,7 +1,9 @@
+import { loadingDispatch } from "./loading/loading.config";
 import { store } from "./store";
 import { IUserState } from "./user/user.config";
 
 const dispatch = store.dispatch;
+
 export const UserReduxAction = (
   payload: IUserState,
   variant: "Login" | "Signup"
@@ -29,7 +31,6 @@ export const UserReduxAction = (
   dispatch({
     type: "CLOSE_ALL",
   });
-  dispatch({
-    type: "DISABLE_LOADING",
-  });
+
+  loadingDispatch("DISABLE");
 };

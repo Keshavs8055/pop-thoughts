@@ -18,12 +18,9 @@ import { Types } from "../../redux/types";
 import { useState } from "react";
 import { GetUserThoughts, UpdatePost } from "../../utils/requests";
 import { State } from "../../redux/store";
-// SCROLL COMPONENT
-interface SlideProps {
-  window?: () => Window;
-  children: React.ReactElement;
-}
-const HideOnScroll = (props: SlideProps) => {
+import { ISlideProps } from "../../utils/interfaces";
+
+const HideOnScroll = (props: ISlideProps) => {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
 

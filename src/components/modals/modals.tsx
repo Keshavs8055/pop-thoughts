@@ -15,10 +15,6 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-// MODAL INTERFACE EXPORT
-export interface IModal {
-  closeFunction: () => boolean;
-}
 
 // MODAL EXPORT
 export const Modals = () => {

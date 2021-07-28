@@ -2,15 +2,10 @@ import { Box, Button, ButtonGroup, Typography } from "@material-ui/core";
 import { InfoOutlined, ThumbUpAltOutlined } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
+import { IModalProps } from "../../../utils/interfaces";
 import { CustomAppBar } from "../../AppBar/appbar";
 
-interface IDisplayThought {
-  closeFunction: () => void;
-}
-
-export const DisplayThought: React.FC<IDisplayThought> = ({
-  closeFunction,
-}) => {
+export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
   const post = useSelector((state: State) => state.ThoughtToDisplay);
   const { exist } = useSelector((state: State) => state.UserReducer);
   const dispatch = useDispatch();

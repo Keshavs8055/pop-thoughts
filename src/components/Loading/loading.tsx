@@ -2,9 +2,7 @@ import { Box, CircularProgress } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { LoadingStyles } from "../../utils/classes";
 import { State } from "../../redux/store";
-interface ILoading {
-  variant: "global" | "circlular";
-}
+import { ILoading } from "../../utils/interfaces";
 
 export const CustomLoading: React.FC<ILoading> = ({ variant }) => {
   const classes = LoadingStyles();

@@ -14,22 +14,8 @@ import {
 import { CardStyles } from "../../utils/classes";
 import { useDispatch } from "react-redux";
 import { Types } from "../../redux/types";
+import { IPostComp } from "../../utils/interfaces";
 
-export interface IPost {
-  title: string;
-  content: string;
-  liked?: boolean;
-  author: string;
-  dateCreated?: Date;
-  id: string;
-  likes?: number;
-  trimmed: string;
-}
-
-interface IPostComp {
-  userPost?: boolean;
-  post: IPost;
-}
 export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
   const classes = CardStyles();
   // const [liked, Handlelike] = React.useState(post.liked || false);

@@ -3,6 +3,8 @@ import { store } from "../redux/store";
 import { verify } from "jsonwebtoken";
 import { IUserState } from "../redux/user/user.config";
 import { UserReduxAction } from "../redux/actions.dispatch";
+import { IThought, IUserData } from "./interfaces";
+import { loadingDispatch } from "../redux/loading/loading.config";
 
 const { dispatch } = store;
 
@@ -15,9 +17,8 @@ export const RequestErrorHandler = (msg: string) => {
       type: 0,
     },
   });
-  dispatch({
-    type: "DISABLE_LOADING",
-  });
+
+  loadingDispatch("DISABLE");
 };
 
 export const getAllThoughts = (type: "data" | "response") =>
@@ -47,9 +48,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
         cancelToken: new axios.CancelToken((c) => (cancel = c)),
       })
       .then((res) => {
-        dispatch({
-          type: "SET_LOADING",
-        });
+        loadingDispatch("START");
         return res;
       })
       .then((res) => {
@@ -63,9 +62,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
           type: "FECTH_NEW",
           payload: res.data.data,
         });
-        dispatch({
-          type: "DISABLE_LOADING",
-        });
+        loadingDispatch("DISABLE");
         resolve(true);
       })
       .catch((err) => {
@@ -79,14 +76,7 @@ export const UpdatePost = () => {
   console.log("LIKED");
 };
 
-interface Thought {
-  content: string;
-  trimmed: string;
-  dateCreated: Date;
-  author: string;
-  likes?: number;
-}
-export const postNewThought = (thought: Thought) =>
+export const postNewThought = (thought: IThought) =>
   new Promise((resolve: (val: any) => any, reject) => {
     let updatedThought = {
       ...thought,
@@ -131,17 +121,10 @@ export const postNewThought = (thought: Thought) =>
       });
   });
 // USER SIGN UP
-interface IUserData {
-  fullName: string;
-  password: string;
-  email: string;
-}
 
 export const UserSignUp = (signUpData: IUserData) =>
   new Promise((resolve: (val: any) => any, reject) => {
-    dispatch({
-      type: "SET_LOADING",
-    });
+    loadingDispatch("START");
     axios
       .post("/api/users/signup", { ...signUpData })
       .then((res) => {
@@ -164,11 +147,7 @@ export const UserSignUp = (signUpData: IUserData) =>
       });
   });
 
-interface ILoginData {
-  email: string;
-  password: string;
-}
-export const UserLogin = (loginData: ILoginData) => {
+export const UserLogin = (loginData: IUserData) => {
   axios
     .post("/api/users/login", {
       email: loginData.email,

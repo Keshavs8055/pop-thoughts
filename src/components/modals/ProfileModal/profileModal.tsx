@@ -5,11 +5,9 @@ import { CustomAppBar } from "../../AppBar/appbar";
 // import { Post } from "../../card/card";
 import { State } from "../../../redux/store";
 import { CustomLoading } from "../../Loading/loading";
-interface IProfileProps {
-  closeFunction: () => boolean;
-}
+import { IModalProps } from "../../../utils/interfaces";
 
-export const ProfileModal: React.FC<IProfileProps> = ({ closeFunction }) => {
+export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
   // GET STATE
   const User = useSelector((state: State) => state.UserReducer);
   const thoughts = useSelector(

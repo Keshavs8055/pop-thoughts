@@ -27,8 +27,6 @@ export const Types = {
   loading: {
     SET_LOADING: "SET_LOADING",
     DISABLE_LOADING: "DISABLE_LOADING",
-    LOGIN_LOADING: "LOGIN_LOADING",
-    DISABLE_LOGIN_LOADING: "DISABLE_LOGIN_LOADING",
   },
   // THOUGHTS
   thoughts: {
