@@ -12,7 +12,7 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import { postNewThought } from "../../../utils/requests";
+import { postNewThought, updateThoughtData } from "../../../utils/requests";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
@@ -41,7 +41,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         break;
     }
   };
-  const handleSubmit = () => {
+  const checkError = () => {
     toggleLoading(true);
     if (errors.thought || content.length < 1) {
       dispatch({
@@ -53,8 +53,13 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         },
       });
       setError({ ...errors, formError: true });
-      return;
+      return false;
     }
+    return true;
+  };
+  const handleSubmit = () => {
+    let check = checkError();
+    if (!check) return;
     let len = Math.random() * (300 - 250) + 250;
     const trimmedString = `${content.substring(0, len)}...`;
     postNewThought({
@@ -63,7 +68,15 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       trimmed: trimmedString,
     });
   };
-
+  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
+  const handleEditSubmit = () => {
+    let check = checkError();
+    if (!check) return;
+    updateThoughtData(id, content).then((rs) => {
+      dispatch({ type: Types.modalTypes.CLOSE_ALL });
+    });
+    // CLOSE WHEN DONE;
+  };
   return (
     <>
       <CustomAppBar
@@ -90,7 +103,12 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           ) : null}
         </FormControl>
         {modalEditorMode ? (
-          <Button variant="contained" color="secondary" disabled={loading}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleEditSubmit}
+            disabled={loading || errors.thought}
+          >
             Update
           </Button>
         ) : (
@@ -98,7 +116,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || errors.thought}
           >
             Submit
           </Button>

@@ -88,6 +88,10 @@ export const CustomAppBar = (props: IAppbar) => {
                 {userExist ? (
                   <Button
                     onClick={() => {
+                      dispatch({
+                        type: Types.thoughtTypes.UPDATE_CONTENT,
+                        payload: "",
+                      });
                       dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
                     }}
                     color="secondary"

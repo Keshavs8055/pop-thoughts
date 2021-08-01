@@ -20,6 +20,7 @@ export const ModalReducer = (
       return {
         ...state,
         thoughtModal: !state.thoughtModal,
+        editModeThought: false,
       };
     case Types.modalTypes.SET_THOUGHT_EDIT:
       return {

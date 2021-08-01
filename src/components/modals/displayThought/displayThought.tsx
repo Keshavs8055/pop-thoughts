@@ -1,5 +1,5 @@
-import { Box, Button, ButtonGroup, Typography } from "@material-ui/core";
-import { InfoOutlined, ThumbUpAltOutlined } from "@material-ui/icons";
+import { Box, Button, Typography } from "@material-ui/core";
+import { InfoOutlined } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { IModalProps } from "../../../utils/interfaces";
@@ -24,29 +24,18 @@ export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
         padding={2}
         whiteSpace="pre-line"
       >
-        <Typography align="center" variant="body1">
+        <Typography align="left" variant="body1">
           {post.content}
         </Typography>
-        <Box
-          width="100%"
-          display="flex"
-          marginTop="10px"
-          justifyContent="center"
-        >
+        <Box marginTop="10px">
           {exist ? (
-            <ButtonGroup
+            <Button
               variant="contained"
               color="primary"
-              aria-label="text primary button group"
-              size="medium"
+              startIcon={<InfoOutlined color="secondary" />}
             >
-              <Button startIcon={<ThumbUpAltOutlined color="secondary" />}>
-                Like
-              </Button>
-              <Button startIcon={<InfoOutlined color="secondary" />}>
-                Report
-              </Button>
-            </ButtonGroup>
+              Report
+            </Button>
           ) : (
             <Button
               onClick={() => {
@@ -57,7 +46,6 @@ export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
               Login For More Options
             </Button>
           )}
-          {/* <CustomAppBar variant="Bottom-Nav" /> */}
         </Box>
       </Box>
     </>

@@ -24,7 +24,7 @@ export const RequestErrorHandler = (msg: string) => {
 export const getAllThoughts = (type: "data" | "response") =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios
-      .get("/api/thoughts?sort=-likes")
+      .get("/api/thoughts")
       .then((res) => {
         switch (type) {
           case "data":
@@ -211,3 +211,28 @@ export const GetUserThoughts = () => {
     })
     .catch((e) => console.log(e));
 };
+// UPDATE THOUGHT
+// PATCH - /api/thoughts/:id;
+export const updateThoughtData = (id: string = "", data: string) =>
+  new Promise((resolve: (val: any) => void, reject) => {
+    loadingDispatch("START");
+    axios
+      .patch(`/api/thoughts/${id}`, {
+        content: data,
+      })
+      .then(() => {
+        dispatch({
+          type: "SET_NEW_ALERT",
+          payload: {
+            message: "Thought Updated!",
+            type: 1,
+            display: true,
+          },
+        });
+        resolve(true);
+      })
+      .catch((e) => {
+        RequestErrorHandler(e.message);
+        reject(e);
+      });
+  });

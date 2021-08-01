@@ -6,11 +6,9 @@ export interface ISlideProps {
 // THE POST INTERFACE
 export interface IThought {
   content: string;
-  liked?: boolean;
   author?: string;
   dateCreated?: Date;
   id?: string;
-  likes?: number;
   trimmed: string;
 }
 // POST COMPONENT INTERFACE

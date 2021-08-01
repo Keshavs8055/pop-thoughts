@@ -27,6 +27,10 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
     });
     dispatch({ type: Types.modalTypes.TOGGLE_PROFILE_MODAL });
     dispatch({ type: Types.modalTypes.SET_THOUGHT_EDIT });
+    dispatch({
+      type: Types.displayTypes.SET_THOUGHT_TO_DISPLAY,
+      payload: post,
+    });
   };
   return (
     <Grid item xs={12} sm={8} lg={5}>
