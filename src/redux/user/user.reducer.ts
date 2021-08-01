@@ -1,29 +1,16 @@
-interface UserState {
-  user: object;
-}
-type Action = {
-  type: string;
-  payload: object;
-};
-const INITIAL_STATE = {
-  user: {
-    exist: false,
-  },
-};
+import { Types } from "../types";
+import { INITIAL_STATE, IUserAction, IUserState } from "./user.config";
 
-export const userReducer = (
-  state: UserState = INITIAL_STATE,
-  action: Action
+export const UserReducer = (
+  state: IUserState = INITIAL_STATE,
+  action: IUserAction
 ) => {
   switch (action.type) {
-    case "UPDATE":
+    case Types.userTypes.SET_USER:
       return {
         ...state,
-        user: {
-          exist: true,
-        },
+        ...action.payload,
       };
-
     default:
       return {
         ...state,

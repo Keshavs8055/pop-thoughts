@@ -3,26 +3,22 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  makeStyles,
   TextField,
 } from "@material-ui/core";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { FormStyles } from "../../../../utils/classes";
+import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
+import { State } from "../../../../redux/store";
+import { CustomLoading } from "../../../Loading/loading";
+import { Types } from "../../../../redux/types";
 
 type IMainForm = {
   variant: "login" | "signup";
 };
 
-const applyStyles = makeStyles((theme) => ({
-  inputField: {
-    marginBottom: theme.spacing(2),
-  },
-  helperText: {
-    color: theme.palette.error.main,
-  },
-}));
-
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
-  const classes = applyStyles();
+  const classes = FormStyles();
   //**************
   //STATE
   //**************
@@ -38,14 +34,19 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
     fullName: "",
     confirmPassword: "",
   });
+  const btnLoading = useSelector(
+    (state: State) => state.LoadingReducer.loading
+  );
+  const dispatch = useDispatch();
   //**************
   //INPUT CHANGE
   //**************
-  const handleChange = (
+  const handleChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = e.currentTarget;
-    setValue({ ...values, [name]: value });
+    await setValue({ ...values, [name]: value });
+    dispatch({ type: Types.loading.DISABLE_LOADING });
     switch (name) {
       case "email":
         let re = /\S+@\S+\.\S+/;
@@ -56,13 +57,13 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         setError({ ...errors, fullName: !n_re.test(value) });
         break;
       case "password":
+        console.log(values.password, values.confirmPassword);
+
         let p_re = /^(?=.*[0-9])(?=.*[?!@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,16}$/;
         setError({ ...errors, password: !p_re.test(value) });
         break;
       case "confirmPassword":
-        let cp_error = values.password === values.confirmPassword;
-
-        setError({ ...errors, confirmPassword: !cp_error });
+        setError({ ...errors, confirmPassword: false });
         break;
       default:
         return true;
@@ -74,6 +75,9 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   switch (variant) {
     case "login":
       return (
+        //************
+        //LOGIN
+        //************
         <Box margin={0} padding={1}>
           <FormControl className={classes.inputField} fullWidth>
             <TextField
@@ -82,7 +86,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               name="email"
               type="email"
               variant="outlined"
-              color="secondary"
+              color="primary"
               autoComplete="off"
               onChange={handleChange}
             ></TextField>
@@ -100,7 +104,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               label="Password"
               type="password"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
             ></TextField>
             {errors.password ? (
@@ -110,13 +114,24 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               </FormHelperText>
             ) : null}
           </FormControl>
-          <Button color="secondary" variant="contained">
+          <Button
+            color="primary"
+            disabled={errors.email || errors.password || btnLoading}
+            onClick={() => {
+              handleLoginSubmit({ ...values });
+            }}
+            variant="contained"
+          >
             Login
           </Button>
+          {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );
     case "signup":
       return (
+        //************
+        //SIGNUP
+        //************
         <Box margin={0} padding={1}>
           <FormControl className={classes.inputField} fullWidth>
             <TextField
@@ -125,7 +140,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               name="fullName"
               type="name"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
               autoComplete="off"
             ></TextField>
@@ -142,7 +157,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               label="Email"
               type="email"
               variant="outlined"
-              color="secondary"
+              color="primary"
               onChange={handleChange}
               autoComplete="off"
             ></TextField>
@@ -157,16 +172,16 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               error={errors.password}
               label="Password"
               name="password"
-              type="password"
+              // type="password"
               variant="outlined"
               onChange={handleChange}
-              color="secondary"
+              color="primary"
             ></TextField>
             {errors.password ? (
               <FormHelperText className={classes.helperText}>
                 Password contains atleast a number and a special character
                 (?!@#$%^&*) <br />
-                Pasword must be atleast 8 characters long
+                Pasword must be atleast 8 characters and atmost 16 characters
               </FormHelperText>
             ) : null}
           </FormControl>
@@ -174,11 +189,11 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             <TextField
               error={errors.confirmPassword}
               label="Confirm Password"
-              type="password"
+              // type="password"
               variant="outlined"
               name="confirmPassword"
               onChange={handleChange}
-              color="secondary"
+              color="primary"
             ></TextField>
             {errors.confirmPassword ? (
               <FormHelperText className={classes.helperText}>
@@ -187,9 +202,25 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             ) : null}
           </FormControl>
 
-          <Button color="secondary" variant="contained">
+          <Button
+            color="primary"
+            disabled={
+              errors.confirmPassword ||
+              errors.email ||
+              errors.fullName ||
+              errors.password ||
+              btnLoading
+            }
+            onClick={() => {
+              if (values.confirmPassword !== values.password)
+                setError({ ...errors, confirmPassword: true });
+              handleSignUpSubmit({ ...values });
+            }}
+            variant="contained"
+          >
             Sign-Up
           </Button>
+          {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );
   }

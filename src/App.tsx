@@ -1,24 +1,35 @@
-import { Grid, ThemeProvider } from "@material-ui/core";
+import { Box, Container, ThemeProvider } from "@material-ui/core";
 import React from "react";
-import NavBar from "./components/Nav/Nav";
 import Homepage from "./pages/Homepage/homepage";
-import { Provider } from "react-redux";
-
-import { Theme } from "./theme";
-import { store } from "./redux/store";
 import { Modals } from "./components/modals/modals";
+import { DarkTheme, Theme } from "./utils/theme";
+import { CustomAppBar } from "./components/AppBar/appbar";
+import { AlertComponent } from "./components/Alert/AlertComponent";
+
+let t = "light";
+export const getCookie = (key: string) => {
+  console.log(document.cookie);
+  console.log(
+    document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1")
+  );
+
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+};
+console.log(getCookie("jwt"));
 
 function App() {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={Theme}>
-        <Grid container>
-          <NavBar />
+    <ThemeProvider theme={t === "dark" ? DarkTheme : Theme}>
+      <CustomAppBar variant="NavBar" />
+      <Container>
+        <Box my={1}>
           <Homepage />
           <Modals />
-        </Grid>
-      </ThemeProvider>
-    </Provider>
+          <AlertComponent />
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 
