@@ -2,11 +2,10 @@ import { Box, Container, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import Homepage from "./pages/Homepage/homepage";
 import { Modals } from "./components/modals/modals";
-import { DarkTheme, Theme } from "./utils/theme";
+import { Theme } from "./utils/theme";
 import { CustomAppBar } from "./components/AppBar/appbar";
 import { AlertComponent } from "./components/Alert/AlertComponent";
 
-let t = "light";
 export const getCookie = (key: string) => {
   console.log(document.cookie);
   console.log(
@@ -20,7 +19,7 @@ console.log(getCookie("jwt"));
 
 function App() {
   return (
-    <ThemeProvider theme={t === "dark" ? DarkTheme : Theme}>
+    <ThemeProvider theme={Theme}>
       <CustomAppBar variant="NavBar" />
       <Container>
         <Box my={1}>

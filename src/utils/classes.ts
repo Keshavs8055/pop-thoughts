@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
 //LOGIN FORMS
-
 export const FormStyles = makeStyles((theme) => ({
   inputField: {
     marginBottom: theme.spacing(2),
@@ -30,8 +29,7 @@ export const FormStyles = makeStyles((theme) => ({
     },
   },
 }));
-// NAVBAR Styles
-
+// NAVBAR
 export const NavStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -44,8 +42,8 @@ export const NavStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
-// THOUGHT CARD STYLES
 
+// THOUGHT CARD STYLES
 export const CardStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -62,6 +60,7 @@ export const CardStyles = makeStyles({
     marginBottom: 12,
   },
 });
+
 // ALERT COMPONENT
 export const AlertStyles = makeStyles((theme) => ({
   root: {
@@ -77,6 +76,7 @@ export const AlertStyles = makeStyles((theme) => ({
     },
   },
 }));
+
 // LOADING STYLE
 export const LoadingStyles = makeStyles((theme) => ({
   "@keyframes loadingAnim": {

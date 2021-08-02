@@ -44,3 +44,22 @@ export interface IUserData {
   password: string;
   email: string;
 }
+// APPBAR PROPS
+export type IAppbar =
+  | {
+      variant: "Profile";
+      closeFunction: () => void;
+    }
+  | {
+      variant: "NavBar";
+    }
+  | {
+      variant: "DisplayThought";
+      closeFunction: () => void;
+      author?: string;
+    }
+  | {
+      variant: "Thought";
+      closeFunction: () => void;
+      editMode: boolean;
+    };

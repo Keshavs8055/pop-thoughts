@@ -1,7 +1,7 @@
 import { loadingDispatch } from "../../../../redux/loading/loading.config";
 import { store } from "../../../../redux/store";
 import { IFormHandlers } from "../../../../utils/interfaces";
-import { UserLogin, UserSignUp } from "../../../../utils/requests";
+import { UserLogin, UserSignUp } from "../../../../utils/requests/user.reqs";
 
 const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
   const dispatch = store.dispatch;

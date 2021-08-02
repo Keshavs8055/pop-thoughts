@@ -17,7 +17,6 @@ import { IPostComp } from "../../utils/interfaces";
 
 export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
   const classes = CardStyles();
-  // const [liked, Handlelike] = React.useState(post.liked || false);
   const dispatch = useDispatch();
 
   const handleEdit = () => {

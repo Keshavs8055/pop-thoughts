@@ -12,7 +12,10 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import { postNewThought, updateThoughtData } from "../../../utils/requests";
+import {
+  postNewThought,
+  updateThoughtData,
+} from "../../../utils/requests/thought.req";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
