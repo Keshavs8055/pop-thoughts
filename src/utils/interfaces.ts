@@ -30,6 +30,7 @@ export interface IFormHandlers {
   email: string;
   fullName: "" | string;
   confirmPassword: "" | string;
+  rememberMe: boolean;
 }
 // LOGIN/SIGN-UP TABS
 export interface ITabPanel {
@@ -43,6 +44,7 @@ export interface IUserData {
   fullName?: string;
   password: string;
   email: string;
+  rememberMe?: boolean;
 }
 // APPBAR PROPS
 export type IAppbar =

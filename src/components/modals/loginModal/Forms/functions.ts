@@ -40,11 +40,17 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
   }
 };
 const dispatch = store.dispatch;
+
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
   loadingDispatch("START");
   checkForValues(data, "login");
-  UserLogin({ email: data.email, password: data.password });
+
+  UserLogin({
+    email: data.email,
+    password: data.password,
+    rememberMe: data.rememberMe,
+  });
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {

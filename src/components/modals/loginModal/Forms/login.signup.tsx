@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   FormControl,
+  FormControlLabel,
   FormHelperText,
+  Switch,
   TextField,
 } from "@material-ui/core";
 import React from "react";
@@ -15,6 +17,19 @@ import { Types } from "../../../../redux/types";
 
 type IMainForm = {
   variant: "login" | "signup";
+};
+interface IRememberMeButon {
+  state: boolean;
+  handler: () => void;
+}
+
+const RememberMe: React.FC<IRememberMeButon> = ({ state, handler }) => {
+  return (
+    <FormControlLabel
+      control={<Switch checked={state} onChange={handler} name="Remember Me" />}
+      label="Remember Me"
+    />
+  );
 };
 
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
@@ -33,6 +48,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
     email: "",
     fullName: "",
     confirmPassword: "",
+    rememberMe: false,
   });
   const btnLoading = useSelector(
     (state: State) => state.LoadingReducer.loading
@@ -114,6 +130,12 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               </FormHelperText>
             ) : null}
           </FormControl>
+          <RememberMe
+            state={values.rememberMe}
+            handler={() =>
+              setValue({ ...values, rememberMe: !values.rememberMe })
+            }
+          />
           <Button
             color="primary"
             disabled={errors.email || errors.password || btnLoading}
@@ -172,7 +194,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               error={errors.password}
               label="Password"
               name="password"
-              // type="password"
+              type="password"
               variant="outlined"
               onChange={handleChange}
               color="primary"
@@ -189,7 +211,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             <TextField
               error={errors.confirmPassword}
               label="Confirm Password"
-              // type="password"
+              type="password"
               variant="outlined"
               name="confirmPassword"
               onChange={handleChange}

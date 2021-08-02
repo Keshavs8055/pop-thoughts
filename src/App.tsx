@@ -1,23 +1,52 @@
 import { Box, Container, ThemeProvider } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import Homepage from "./pages/Homepage/homepage";
 import { Modals } from "./components/modals/modals";
 import { Theme } from "./utils/theme";
 import { CustomAppBar } from "./components/AppBar/appbar";
 import { AlertComponent } from "./components/Alert/AlertComponent";
+import { verify } from "jsonwebtoken";
+import { getUser } from "./utils/requests/user.reqs";
+import { IUserState } from "./redux/user/user.config";
+import { UserReduxAction } from "./redux/actions.dispatch";
+import { RequestErrorHandler } from "./utils/requests/errorHandler";
+import { loadingDispatch } from "./redux/loading/loading.config";
 
-export const getCookie = (key: string) => {
-  console.log(document.cookie);
-  console.log(
-    document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1")
+export const checkUserStatus = () => {
+  loadingDispatch("START");
+  const token = localStorage.getItem("jwt");
+
+  if (!token) {
+    loadingDispatch("DISABLE");
+    return;
+  }
+  const decoded: any = verify(
+    token,
+    process.env.REACT_APP_JWT_SECRET as string
   );
-
-  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  return b ? b.pop() : "";
+  const userId = decoded.id;
+  getUser(userId, token)
+    .then((user: IUserState) => {
+      UserReduxAction(
+        {
+          fullName: user.fullName,
+          _id: user._id,
+          email: user.email,
+          exist: true,
+        },
+        "Login"
+      );
+    })
+    .catch((e) => {
+      console.log(e);
+      RequestErrorHandler(e.response.data.message);
+    });
 };
-console.log(getCookie("jwt"));
 
 function App() {
+  useEffect(() => {
+    checkUserStatus();
+  });
   return (
     <ThemeProvider theme={Theme}>
       <CustomAppBar variant="NavBar" />

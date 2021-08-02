@@ -1,12 +1,12 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { CustomAppBar } from "../../AppBar/appbar";
-// import { Post } from "../../card/card";
 import { State } from "../../../redux/store";
 import { CustomLoading } from "../../Loading/loading";
 import { IModalProps } from "../../../utils/interfaces";
 import { Post } from "../../card/card";
+import { userLogOut } from "../../../utils/requests/user.reqs";
 
 export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
   // GET STATE
@@ -22,13 +22,24 @@ export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
     <>
       <CustomAppBar variant="Profile" closeFunction={closeFunction} />
 
-      <Box width="100%" marginTop={2}>
-        <Typography variant="h5" align="center">
-          {User.fullName}
-        </Typography>
-        <Typography variant="subtitle2" align="center">
-          {User.email}
-        </Typography>
+      <Box
+        width="100%"
+        marginTop={2}
+        display="flex"
+        alignItems="center"
+        justifyContent="space-evenly"
+      >
+        <Box>
+          <Typography variant="h5" align="center">
+            {User.fullName}
+          </Typography>
+          <Typography variant="subtitle2" align="center">
+            {User.email}
+          </Typography>
+        </Box>
+        <Button variant="contained" onClick={userLogOut}>
+          Log Out
+        </Button>
       </Box>
       <Box
         padding={2}

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { loadingDispatch } from "../../redux/loading/loading.config";
 import { store } from "../../redux/store";
 import { IThought } from "../interfaces";
@@ -24,7 +23,7 @@ export const getAllThoughts = (type: "data" | "response") =>
 // GET THOUGHTS BY PAGE
 export const getThoughtsNextPage = (currentPage: number, limit: number) =>
   new Promise((resolve, reject) => {
-    const dispatch = useDispatch();
+    const dispatch = store.dispatch;
     const nextPage = currentPage + 1;
     let cancel;
     axios
@@ -59,7 +58,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
 // POST NEW THOUGHTS
 export const postNewThought = (thought: IThought) =>
   new Promise((resolve: (val: any) => any, reject) => {
-    const dispatch = useDispatch();
+    const dispatch = store.dispatch;
 
     thought.author = store.getState().UserReducer.fullName;
     let updatedThought = {
@@ -100,7 +99,7 @@ export const postNewThought = (thought: IThought) =>
 export const updateThoughtData = (id: string = "", data: string) =>
   new Promise((resolve: (val: any) => void, reject) => {
     loadingDispatch("START");
-    const dispatch = useDispatch();
+    const dispatch = store.dispatch;
 
     axios
       .patch(`/api/thoughts/${id}`, {

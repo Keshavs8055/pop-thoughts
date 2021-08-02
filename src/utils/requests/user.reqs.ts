@@ -1,6 +1,5 @@
 import axios from "axios";
 import { verify } from "jsonwebtoken";
-import { useDispatch } from "react-redux";
 import { UserReduxAction } from "../../redux/actions.dispatch";
 import { loadingDispatch } from "../../redux/loading/loading.config";
 import { store } from "../../redux/store";
@@ -45,8 +44,11 @@ export const UserLogin = (loginData: IUserData) => {
         res.data.token,
         process.env.REACT_APP_JWT_SECRET as string
       );
+      if (loginData.rememberMe) {
+        localStorage.setItem("jwt", res.data.token);
+      }
       const userId = decoded.id;
-      getUser(userId)
+      getUser(userId, res.data.token)
         .then((user: IUserState) => {
           UserReduxAction(
             {
@@ -70,10 +72,14 @@ export const UserLogin = (loginData: IUserData) => {
     });
 };
 
-const getUser = (id: string) =>
+export const getUser = (id: string, token: string) =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios
-      .get(`/api/users/${id}`)
+      .get(`/api/users/${id}`, {
+        headers: {
+          Cookie: `jwt=${token};`,
+        },
+      })
       .then(async (res) => {
         const data = await res;
 
@@ -84,7 +90,7 @@ const getUser = (id: string) =>
 
 export const GetUserThoughts = () => {
   loadingDispatch("START");
-  const dispatch = useDispatch();
+  const dispatch = store.dispatch;
   const id = store.getState().UserReducer._id;
   axios
     .get(`/api/users/thoughts/${id}`)
@@ -96,4 +102,24 @@ export const GetUserThoughts = () => {
       loadingDispatch("DISABLE");
     })
     .catch((e) => console.log(e));
+};
+
+// LOG OUT USER
+export const userLogOut = () => {
+  const token = localStorage.getItem("jwt");
+  const dispatch = store.dispatch;
+  dispatch({
+    type: "SET_USER",
+    payload: {
+      _id: "",
+      email: "",
+      fullName: "",
+      exist: false,
+    },
+  });
+  dispatch({
+    type: "CLOSE_ALL",
+  });
+  if (!token) return;
+  localStorage.removeItem("jwt");
 };
