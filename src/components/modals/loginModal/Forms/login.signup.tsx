@@ -4,7 +4,7 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Switch,
+  Checkbox,
   TextField,
 } from "@material-ui/core";
 import React from "react";
@@ -26,7 +26,9 @@ interface IRememberMeButon {
 const RememberMe: React.FC<IRememberMeButon> = ({ state, handler }) => {
   return (
     <FormControlLabel
-      control={<Switch checked={state} onChange={handler} name="Remember Me" />}
+      control={
+        <Checkbox checked={state} onChange={handler} name="Remember Me" />
+      }
       label="Remember Me"
     />
   );
@@ -123,19 +125,20 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               color="primary"
               onChange={handleChange}
             ></TextField>
-            {errors.password ? (
-              <FormHelperText className={classes.helperText}>
-                Password contains atleast a number and a special character
-                (?!@#$%^&*)
-              </FormHelperText>
-            ) : null}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <RememberMe
+                state={values.rememberMe}
+                handler={() =>
+                  setValue({ ...values, rememberMe: !values.rememberMe })
+                }
+              />
+              <Button variant="text">Forgot Password?</Button>
+            </Box>
           </FormControl>
-          <RememberMe
-            state={values.rememberMe}
-            handler={() =>
-              setValue({ ...values, rememberMe: !values.rememberMe })
-            }
-          />
           <Button
             color="primary"
             disabled={errors.email || errors.password || btnLoading}
@@ -146,6 +149,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           >
             Login
           </Button>
+
           {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );

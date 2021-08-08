@@ -42,6 +42,7 @@ export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
                 dispatch({ type: "CLOSE_ALL" });
                 dispatch({ type: "TOGGLE_LOGIN_MODAL" });
               }}
+              variant="outlined"
             >
               Login For More Options
             </Button>
