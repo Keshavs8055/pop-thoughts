@@ -11,6 +11,7 @@ export const UserReducer = (
         ...state,
         ...action.payload,
       };
+
     default:
       return {
         ...state,

@@ -1,7 +1,5 @@
 import {
   AppBar,
-  BottomNavigation,
-  BottomNavigationAction,
   Box,
   Button,
   IconButton,
@@ -11,14 +9,13 @@ import {
   Typography,
   useScrollTrigger,
 } from "@material-ui/core";
-import { Close, Person, Report, ThumbUpAltOutlined } from "@material-ui/icons";
+import { Close, Person } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavStyles } from "../../utils/classes";
 import { Types } from "../../redux/types";
-import { useState } from "react";
-import { GetUserThoughts, UpdatePost } from "../../utils/requests";
+import { IAppbar, ISlideProps } from "../../utils/interfaces";
 import { State } from "../../redux/store";
-import { ISlideProps } from "../../utils/interfaces";
+import { GetUserThoughts } from "../../utils/requests/user.reqs";
 
 const HideOnScroll = (props: ISlideProps) => {
   const { children, window } = props;
@@ -31,33 +28,11 @@ const HideOnScroll = (props: ISlideProps) => {
   );
 };
 
-type IAppbar =
-  | {
-      variant: "Profile";
-      closeFunction: () => void;
-    }
-  | {
-      variant: "NavBar";
-    }
-  | {
-      variant: "DisplayThought";
-      closeFunction: () => void;
-      author?: string;
-    }
-  | {
-      variant: "Thought";
-      closeFunction: () => void;
-      editMode: boolean;
-    }
-  | {
-      variant: "Bottom-Nav";
-    };
-
 export const CustomAppBar = (props: IAppbar) => {
   const dispatch = useDispatch();
   const user = useSelector((state: State) => state.UserReducer);
   const userExist = user.exist;
-  const [nav_value, nav_setValue] = useState(0);
+
   switch (props.variant) {
     case "NavBar":
       const classes = NavStyles();
@@ -88,6 +63,10 @@ export const CustomAppBar = (props: IAppbar) => {
                 {userExist ? (
                   <Button
                     onClick={() => {
+                      dispatch({
+                        type: Types.thoughtTypes.UPDATE_CONTENT,
+                        payload: "",
+                      });
                       dispatch({ type: Types.modalTypes.TOGGLE_THOUGHT_MODAL });
                     }}
                     color="secondary"
@@ -194,33 +173,5 @@ export const CustomAppBar = (props: IAppbar) => {
           </Toolbar>
         </AppBar>
       );
-    case "Bottom-Nav": {
-      return (
-        <BottomNavigation
-          value={nav_value}
-          showLabels
-          onChange={(event, nav_newValue) => {
-            nav_setValue(nav_newValue);
-          }}
-          style={{
-            marginTop: "10px",
-            minWidth: "500px",
-            position: "absolute",
-            left: "50%",
-            transform: "translate(-50%, 0)",
-          }}
-        >
-          <BottomNavigationAction
-            label="Like"
-            icon={<ThumbUpAltOutlined color="secondary" />}
-            onClick={UpdatePost}
-          />
-          <BottomNavigationAction
-            label="Report"
-            icon={<Report color="secondary" />}
-          />
-        </BottomNavigation>
-      );
-    }
   }
 };

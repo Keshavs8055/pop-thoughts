@@ -1,34 +1,38 @@
 import { Box, Container, ThemeProvider } from "@material-ui/core";
-import React from "react";
+import { useEffect } from "react";
 import Homepage from "./pages/Homepage/homepage";
 import { Modals } from "./components/modals/modals";
-import { DarkTheme, Theme } from "./utils/theme";
+import { Theme } from "./utils/theme";
 import { CustomAppBar } from "./components/AppBar/appbar";
 import { AlertComponent } from "./components/Alert/AlertComponent";
 
-let t = "light";
-export const getCookie = (key: string) => {
-  console.log(document.cookie);
-  console.log(
-    document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1")
-  );
-
-  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  return b ? b.pop() : "";
-};
-console.log(getCookie("jwt"));
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ForgotPasswordPage } from "./pages/forgotPassword/forgotPasswordForm";
+import { setUserStatus } from "./utils/requests/user.reqs";
 
 function App() {
+  useEffect(() => {
+    setUserStatus(localStorage.getItem("jwt"));
+  });
   return (
-    <ThemeProvider theme={t === "dark" ? DarkTheme : Theme}>
-      <CustomAppBar variant="NavBar" />
-      <Container>
-        <Box my={1}>
-          <Homepage />
-          <Modals />
-          <AlertComponent />
-        </Box>
-      </Container>
+    <ThemeProvider theme={Theme}>
+      <Router>
+        <Switch>
+          <Route path="/forgotpassword">
+            <ForgotPasswordPage />
+          </Route>
+          <Route path="/">
+            <CustomAppBar variant="NavBar" />
+            <Container>
+              <Box my={1}>
+                <Homepage />
+                <Modals />
+              </Box>
+            </Container>
+          </Route>
+        </Switch>
+      </Router>
+      <AlertComponent />
     </ThemeProvider>
   );
 }

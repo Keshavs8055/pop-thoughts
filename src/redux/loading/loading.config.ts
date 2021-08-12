@@ -7,10 +7,6 @@ export interface ILoading {
 export interface ILoadingAction {
   type: "SET_LOADING" | "DISABLE_LOADING";
 }
-export const INITIAL_STATE: ILoading = {
-  loading: false,
-  loginLoading: false,
-};
 
 export const loadingDispatch = (v: "START" | "DISABLE") => {
   const dispatch = store.dispatch;

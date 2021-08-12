@@ -2,19 +2,40 @@ import {
   Box,
   Button,
   FormControl,
+  FormControlLabel,
   FormHelperText,
+  Checkbox,
   TextField,
 } from "@material-ui/core";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FormStyles } from "../../../../utils/classes";
-import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
+import {
+  handleForgotClick,
+  handleLoginSubmit,
+  handleSignUpSubmit,
+} from "./functions";
 import { State } from "../../../../redux/store";
 import { CustomLoading } from "../../../Loading/loading";
 import { Types } from "../../../../redux/types";
 
 type IMainForm = {
   variant: "login" | "signup";
+};
+interface IRememberMeButon {
+  state: boolean;
+  handler: () => void;
+}
+
+const RememberMe: React.FC<IRememberMeButon> = ({ state, handler }) => {
+  return (
+    <FormControlLabel
+      control={
+        <Checkbox checked={state} onChange={handler} name="Remember Me" />
+      }
+      label="Remember Me"
+    />
+  );
 };
 
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
@@ -33,6 +54,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
     email: "",
     fullName: "",
     confirmPassword: "",
+    rememberMe: false,
   });
   const btnLoading = useSelector(
     (state: State) => state.LoadingReducer.loading
@@ -57,8 +79,6 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         setError({ ...errors, fullName: !n_re.test(value) });
         break;
       case "password":
-        console.log(values.password, values.confirmPassword);
-
         let p_re = /^(?=.*[0-9])(?=.*[?!@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,16}$/;
         setError({ ...errors, password: !p_re.test(value) });
         break;
@@ -107,12 +127,24 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               color="primary"
               onChange={handleChange}
             ></TextField>
-            {errors.password ? (
-              <FormHelperText className={classes.helperText}>
-                Password contains atleast a number and a special character
-                (?!@#$%^&*)
-              </FormHelperText>
-            ) : null}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <RememberMe
+                state={values.rememberMe}
+                handler={() =>
+                  setValue({ ...values, rememberMe: !values.rememberMe })
+                }
+              />
+              <Button
+                variant="text"
+                onClick={() => handleForgotClick(values.email)}
+              >
+                Forgot Password?
+              </Button>
+            </Box>
           </FormControl>
           <Button
             color="primary"
@@ -124,6 +156,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
           >
             Login
           </Button>
+
           {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
       );
@@ -172,7 +205,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               error={errors.password}
               label="Password"
               name="password"
-              // type="password"
+              type="password"
               variant="outlined"
               onChange={handleChange}
               color="primary"
@@ -189,7 +222,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
             <TextField
               error={errors.confirmPassword}
               label="Confirm Password"
-              // type="password"
+              type="password"
               variant="outlined"
               name="confirmPassword"
               onChange={handleChange}

@@ -9,7 +9,6 @@ export const CustomLoading: React.FC<ILoading> = ({ variant }) => {
   const GlobalDisplay = useSelector(
     (state: State) => state.LoadingReducer.loading
   );
-  console.log("STATE IN LOADING", GlobalDisplay);
 
   switch (variant) {
     case "circlular":

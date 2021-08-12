@@ -6,11 +6,9 @@ export interface ISlideProps {
 // THE POST INTERFACE
 export interface IThought {
   content: string;
-  liked?: boolean;
   author?: string;
   dateCreated?: Date;
   id?: string;
-  likes?: number;
   trimmed: string;
 }
 // POST COMPONENT INTERFACE
@@ -32,6 +30,7 @@ export interface IFormHandlers {
   email: string;
   fullName: "" | string;
   confirmPassword: "" | string;
+  rememberMe: boolean;
 }
 // LOGIN/SIGN-UP TABS
 export interface ITabPanel {
@@ -45,4 +44,24 @@ export interface IUserData {
   fullName?: string;
   password: string;
   email: string;
+  rememberMe?: boolean;
 }
+// APPBAR PROPS
+export type IAppbar =
+  | {
+      variant: "Profile";
+      closeFunction: () => void;
+    }
+  | {
+      variant: "NavBar";
+    }
+  | {
+      variant: "DisplayThought";
+      closeFunction: () => void;
+      author?: string;
+    }
+  | {
+      variant: "Thought";
+      closeFunction: () => void;
+      editMode: boolean;
+    };

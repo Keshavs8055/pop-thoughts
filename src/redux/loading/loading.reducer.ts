@@ -1,5 +1,10 @@
 import { Types } from "../types";
-import { ILoading, ILoadingAction, INITIAL_STATE } from "./loading.config";
+import { ILoading, ILoadingAction } from "./loading.config";
+
+export const INITIAL_STATE: ILoading = {
+  loading: false,
+  loginLoading: false,
+};
 
 export const LoadingReducer = (
   state: ILoading = INITIAL_STATE,

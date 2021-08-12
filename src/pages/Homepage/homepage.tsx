@@ -1,10 +1,11 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
-import { getThoughtsNextPage } from "../../utils/requests";
 import { Post } from "./../../components/card/card";
 import { useSelector } from "react-redux";
 import { State } from "../../redux/store";
+import { getThoughtsNextPage } from "../../utils/requests/thought.req";
+import { loadingDispatch } from "../../redux/loading/loading.config";
 
 const Homepage = () => {
   // COMPOENT STATE
@@ -37,15 +38,15 @@ const Homepage = () => {
   useEffect(() => {
     togglePostLoading(true);
     if (!makeMoreRequests) {
-      console.log("More Requests Not Required");
       togglePostLoading(false);
       setCurrentPage(currentPage);
       return;
     }
-    getThoughtsNextPage(currentPage, 3).then((res) => {
+    getThoughtsNextPage(currentPage, 15).then((res) => {
       if (!res) {
         togglePostLoading(false);
         setMakeMoreRequests(false);
+        loadingDispatch("DISABLE");
         return;
       }
       togglePostLoading(false);
@@ -55,7 +56,7 @@ const Homepage = () => {
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
       <Grid container alignItems="center" justify="center" spacing={2}>
-        {posts.length > 0
+        {posts && posts.length > 0
           ? posts.map((post, i) => {
               return <Post post={{ ...post }} key={i} userPost={false} />;
             })

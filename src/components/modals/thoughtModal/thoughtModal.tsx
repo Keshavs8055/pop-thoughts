@@ -12,12 +12,15 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import { postNewThought } from "../../../utils/requests";
+import {
+  postNewThought,
+  updateThoughtData,
+} from "../../../utils/requests/thought.req";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
   const [errors, setError] = React.useState({
-    thought: false,
+    thought: true,
     formError: false,
   });
   const [loading, toggleLoading] = React.useState(false);
@@ -30,18 +33,14 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = e.currentTarget;
-    switch (name) {
-      case "thought":
-        dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-        if (value.length < 250 || value.length > 1000) {
-          setError({ ...errors, thought: true });
-        } else {
-          setError({ ...errors, thought: false });
-        }
-        break;
+    dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
+    if (value.length < 250 || value.length > 1000) {
+      setError({ ...errors, [name]: true });
+    } else {
+      setError({ ...errors, [name]: false });
     }
   };
-  const handleSubmit = () => {
+  const checkError = () => {
     toggleLoading(true);
     if (errors.thought || content.length < 1) {
       dispatch({
@@ -53,8 +52,13 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         },
       });
       setError({ ...errors, formError: true });
-      return;
+      return false;
     }
+    return true;
+  };
+  const handleSubmit = () => {
+    let check = checkError();
+    if (!check) return;
     let len = Math.random() * (300 - 250) + 250;
     const trimmedString = `${content.substring(0, len)}...`;
     postNewThought({
@@ -63,7 +67,19 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       trimmed: trimmedString,
     });
   };
-
+  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
+  const handleEditSubmit = () => {
+    let check = checkError();
+    if (!check) return;
+    let len = Math.random() * (300 - 250) + 250;
+    const trimmedString = `${content.substring(0, len)}...`;
+    updateThoughtData(id, { content: content, trimmed: trimmedString }).then(
+      (rs) => {
+        dispatch({ type: Types.modalTypes.CLOSE_ALL });
+      }
+    );
+    // CLOSE WHEN DONE;
+  };
   return (
     <>
       <CustomAppBar
@@ -90,7 +106,12 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           ) : null}
         </FormControl>
         {modalEditorMode ? (
-          <Button variant="contained" color="secondary" disabled={loading}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleEditSubmit}
+            disabled={loading || errors.thought}
+          >
             Update
           </Button>
         ) : (
@@ -98,7 +119,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || errors.thought}
           >
             Submit
           </Button>
