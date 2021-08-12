@@ -22,6 +22,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
           },
         });
         loadingDispatch("DISABLE");
+        return false;
       }
       break;
     case "signup":
@@ -40,9 +41,11 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
           },
         });
         loadingDispatch("DISABLE");
+        return false;
       }
       break;
   }
+  return true;
 };
 const dispatch = store.dispatch;
 

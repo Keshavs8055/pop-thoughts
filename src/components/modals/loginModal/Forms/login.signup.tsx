@@ -44,10 +44,10 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   //STATE
   //**************
   const [errors, setError] = React.useState({
-    fullName: false,
-    email: false,
-    password: false,
-    confirmPassword: false,
+    fullName: true,
+    email: true,
+    password: true,
+    confirmPassword: true,
   });
   const [values, setValue] = React.useState({
     password: "",

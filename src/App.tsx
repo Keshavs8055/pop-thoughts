@@ -1,4 +1,9 @@
-import { Box, Container, ThemeProvider } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  StylesProvider,
+  ThemeProvider,
+} from "@material-ui/core";
 import { useEffect } from "react";
 import Homepage from "./pages/Homepage/homepage";
 import { Modals } from "./components/modals/modals";
@@ -16,23 +21,25 @@ function App() {
   });
   return (
     <ThemeProvider theme={Theme}>
-      <Router>
-        <Switch>
-          <Route path="/forgotpassword">
-            <ForgotPasswordPage />
-          </Route>
-          <Route path="/">
-            <CustomAppBar variant="NavBar" />
-            <Container>
-              <Box my={1}>
-                <Homepage />
-                <Modals />
-              </Box>
-            </Container>
-          </Route>
-        </Switch>
-      </Router>
-      <AlertComponent />
+      <StylesProvider injectFirst>
+        <Router>
+          <Switch>
+            <Route path="/forgotpassword">
+              <ForgotPasswordPage />
+            </Route>
+            <Route path="/">
+              <CustomAppBar variant="NavBar" />
+              <Container>
+                <Box my={1}>
+                  <Homepage />
+                  <Modals />
+                </Box>
+              </Container>
+            </Route>
+          </Switch>
+        </Router>
+        <AlertComponent />
+      </StylesProvider>
     </ThemeProvider>
   );
 }
