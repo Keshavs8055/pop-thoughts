@@ -20,7 +20,7 @@ import {
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
   const [errors, setError] = React.useState({
-    thought: false,
+    thought: true,
     formError: false,
   });
   const [loading, toggleLoading] = React.useState(false);
@@ -33,15 +33,11 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { name, value } = e.currentTarget;
-    switch (name) {
-      case "thought":
-        dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-        if (value.length < 250 || value.length > 1000) {
-          setError({ ...errors, thought: true });
-        } else {
-          setError({ ...errors, thought: false });
-        }
-        break;
+    dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
+    if (value.length < 250 || value.length > 1000) {
+      setError({ ...errors, [name]: true });
+    } else {
+      setError({ ...errors, [name]: false });
     }
   };
   const checkError = () => {
@@ -75,9 +71,13 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const handleEditSubmit = () => {
     let check = checkError();
     if (!check) return;
-    updateThoughtData(id, content).then((rs) => {
-      dispatch({ type: Types.modalTypes.CLOSE_ALL });
-    });
+    let len = Math.random() * (300 - 250) + 250;
+    const trimmedString = `${content.substring(0, len)}...`;
+    updateThoughtData(id, { content: content, trimmed: trimmedString }).then(
+      (rs) => {
+        dispatch({ type: Types.modalTypes.CLOSE_ALL });
+      }
+    );
     // CLOSE WHEN DONE;
   };
   return (

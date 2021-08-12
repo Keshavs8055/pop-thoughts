@@ -112,3 +112,20 @@ export const LoadingStyles = makeStyles((theme) => ({
     zIndex: 10,
   },
 }));
+//LINKS
+export const LinkStyles = makeStyles((theme) => ({
+  link: {
+    textDecoration: "none",
+    fontSize: theme.typography.fontSize + 20 + "px",
+    color: theme.palette.primary.main,
+    textAlign: "center",
+    display: "block",
+    padding: 0,
+    margin: 0,
+  },
+  reset: {
+    font: "inherit",
+    color: "inherit",
+    textDecoration: "none",
+  },
+}));

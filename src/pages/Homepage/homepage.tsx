@@ -37,7 +37,6 @@ const Homepage = () => {
   useEffect(() => {
     togglePostLoading(true);
     if (!makeMoreRequests) {
-      console.log("More Requests Not Required");
       togglePostLoading(false);
       setCurrentPage(currentPage);
       return;

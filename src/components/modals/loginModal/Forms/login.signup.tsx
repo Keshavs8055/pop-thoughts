@@ -10,7 +10,11 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FormStyles } from "../../../../utils/classes";
-import { handleLoginSubmit, handleSignUpSubmit } from "./functions";
+import {
+  handleForgotClick,
+  handleLoginSubmit,
+  handleSignUpSubmit,
+} from "./functions";
 import { State } from "../../../../redux/store";
 import { CustomLoading } from "../../../Loading/loading";
 import { Types } from "../../../../redux/types";
@@ -75,8 +79,6 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         setError({ ...errors, fullName: !n_re.test(value) });
         break;
       case "password":
-        console.log(values.password, values.confirmPassword);
-
         let p_re = /^(?=.*[0-9])(?=.*[?!@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,16}$/;
         setError({ ...errors, password: !p_re.test(value) });
         break;
@@ -136,7 +138,12 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
                   setValue({ ...values, rememberMe: !values.rememberMe })
                 }
               />
-              <Button variant="text">Forgot Password?</Button>
+              <Button
+                variant="text"
+                onClick={() => handleForgotClick(values.email)}
+              >
+                Forgot Password?
+              </Button>
             </Box>
           </FormControl>
           <Button

@@ -2,7 +2,7 @@ import axios from "axios";
 import { loadingDispatch } from "../../redux/loading/loading.config";
 import { store } from "../../redux/store";
 import { IThought } from "../interfaces";
-import { RequestErrorHandler } from "./errorHandler";
+import { checkError, RequestErrorHandler } from "./errorHandler";
 
 export const getAllThoughts = (type: "data" | "response") =>
   new Promise((resolve: (val: any) => any, reject) => {
@@ -18,7 +18,10 @@ export const getAllThoughts = (type: "data" | "response") =>
             break;
         }
       })
-      .catch((err) => reject);
+      .catch((e) => {
+        checkError(e);
+        reject(e);
+      });
   });
 // GET THOUGHTS BY PAGE
 export const getThoughtsNextPage = (currentPage: number, limit: number) =>
@@ -33,12 +36,8 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
       })
       .then((res) => {
         loadingDispatch("START");
-        return res;
-      })
-      .then((res) => {
         if (res.data.data.length === 0) {
           RequestErrorHandler("No More Thoughts Available");
-
           resolve(false);
           throw Error("No More Thoughts Available");
         }
@@ -49,10 +48,10 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
         loadingDispatch("DISABLE");
         resolve(true);
       })
-      .catch((err) => {
-        if (axios.isCancel(err)) return;
-        RequestErrorHandler(err.message);
-        reject(err);
+      .catch((e) => {
+        if (axios.isCancel(e)) return;
+        checkError(e);
+        reject(e);
       });
   });
 // POST NEW THOUGHTS
@@ -90,20 +89,23 @@ export const postNewThought = (thought: IThought) =>
 
         resolve(res);
       })
-      .catch((err) => {
-        RequestErrorHandler("Error While Posting Thought");
-        reject(err);
+      .catch((e) => {
+        checkError(e);
+        reject(e);
       });
   });
 // UPDATE THOUGHT
-export const updateThoughtData = (id: string = "", data: string) =>
+export const updateThoughtData = (
+  id: string = "",
+  data: { content: string; trimmed: string }
+) =>
   new Promise((resolve: (val: any) => void, reject) => {
     loadingDispatch("START");
     const dispatch = store.dispatch;
 
     axios
       .patch(`/api/thoughts/${id}`, {
-        content: data,
+        ...data,
       })
       .then(() => {
         dispatch({
@@ -115,9 +117,12 @@ export const updateThoughtData = (id: string = "", data: string) =>
           },
         });
         resolve(true);
+        loadingDispatch("DISABLE");
       })
       .catch((e) => {
-        RequestErrorHandler(e.message);
+        checkError(e);
+        loadingDispatch("DISABLE");
+
         reject(e);
       });
   });
