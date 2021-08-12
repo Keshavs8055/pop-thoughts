@@ -67,7 +67,7 @@ const Homepage = () => {
           })
         ) : (
           <Box marginTop="10px">
-            <Typography variant="h2" align="center" color="textPrimary">
+            <Typography variant="subtitle1" align="center" color="textPrimary">
               This is the time to let the world know what you think!
             </Typography>
           </Box>
