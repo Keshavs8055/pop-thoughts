@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
 import { Post } from "./../../components/card/card";
@@ -61,11 +61,17 @@ const Homepage = () => {
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
       <Grid container alignItems="center" justify="center" spacing={2}>
-        {posts && posts.length > 0
-          ? posts.map((post, i) => {
-              return <Post post={{ ...post }} key={i} userPost={false} />;
-            })
-          : null}
+        {posts && posts.length > 0 ? (
+          posts.map((post, i) => {
+            return <Post post={{ ...post }} key={i} userPost={false} />;
+          })
+        ) : (
+          <Box marginTop="10px">
+            <Typography variant="h2" align="center" color="textPrimary">
+              This is the time to let the world know what you think!
+            </Typography>
+          </Box>
+        )}
       </Grid>
       {postLoading ? <CustomLoading variant="circlular" /> : null}
     </Box>
