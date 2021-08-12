@@ -13,7 +13,7 @@ export const checkError = (error: any) => {
 };
 
 export const RequestErrorHandler = (msg: string) => {
-  let message = msg.length > 0 ? msg : "An Unexpected Error Ocurred.";
+  let message = msg && msg.length > 0 ? msg : "An Unexpected Error Ocurred.";
   dispatch({
     type: "SET_NEW_ALERT",
     payload: {

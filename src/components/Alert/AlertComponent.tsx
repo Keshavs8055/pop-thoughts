@@ -16,7 +16,7 @@ export const AlertComponent = () => {
       onClose={() => {
         dispatch({
           type: Types.alertTypes.SET_NEW_ALERT,
-          payload: { display: false },
+          payload: { display: false, message: message, type: type },
         });
       }}
       autoHideDuration={6000}
@@ -24,15 +24,15 @@ export const AlertComponent = () => {
       <Alert
         elevation={6}
         variant="filled"
-        severity={type === 0 ? "error" : "success" || "error"}
+        severity={type === 0 ? "error" : "success"}
         onClose={() => {
           dispatch({
             type: Types.alertTypes.SET_NEW_ALERT,
-            payload: { display: false },
+            payload: { display: false, message: message, type: type },
           });
         }}
       >
-        {message || ""}
+        {message}
       </Alert>
     </Snackbar>
   );
