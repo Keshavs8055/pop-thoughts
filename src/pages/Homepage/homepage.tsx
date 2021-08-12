@@ -42,15 +42,20 @@ const Homepage = () => {
       setCurrentPage(currentPage);
       return;
     }
-    getThoughtsNextPage(currentPage, 15).then((res) => {
-      if (!res) {
+    getThoughtsNextPage(currentPage, 15)
+      .then((res) => {
+        if (!res) {
+          togglePostLoading(false);
+          setMakeMoreRequests(false);
+          loadingDispatch("DISABLE");
+          return;
+        }
         togglePostLoading(false);
-        setMakeMoreRequests(false);
+      })
+      .catch((e) => {
         loadingDispatch("DISABLE");
-        return;
-      }
-      togglePostLoading(false);
-    });
+        togglePostLoading(false);
+      });
   }, [currentPage, makeMoreRequests]);
   return (
     <Box style={{ minHeight: "102vh" }}>
