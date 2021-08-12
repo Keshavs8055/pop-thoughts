@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../redux/store";
 import { getThoughtsNextPage } from "../../utils/requests/thought.req";
 import { loadingDispatch } from "../../redux/loading/loading.config";
+import { checkError } from "../../utils/requests/errorHandler";
 
 const Homepage = () => {
   // COMPOENT STATE
@@ -42,7 +43,7 @@ const Homepage = () => {
       setCurrentPage(currentPage);
       return;
     }
-    getThoughtsNextPage(currentPage, 15)
+    getThoughtsNextPage(currentPage, 16)
       .then((res) => {
         if (!res) {
           togglePostLoading(false);
@@ -55,6 +56,7 @@ const Homepage = () => {
       .catch((e) => {
         loadingDispatch("DISABLE");
         togglePostLoading(false);
+        checkError(e);
       });
   }, [currentPage, makeMoreRequests]);
   return (
