@@ -95,9 +95,6 @@ export const getUser = (id: string, token: string) =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios
       .get(`${url}/api/users/${id}`, {
-        headers: {
-          Cookie: `jwt=${token};`,
-        },
         withCredentials: true,
       })
       .then(async (res) => {
