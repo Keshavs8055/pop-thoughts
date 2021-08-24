@@ -52,8 +52,8 @@ const dispatch = store.dispatch;
 // HANDLE LOGIN
 export const handleLoginSubmit = (data: IFormHandlers) => {
   loadingDispatch("START");
-  checkForValues(data, "login");
-
+  let dataOk = checkForValues(data, "login");
+  if (!dataOk) return;
   UserLogin({
     email: data.email,
     password: data.password,
@@ -63,8 +63,9 @@ export const handleLoginSubmit = (data: IFormHandlers) => {
 // HANDLE SIGNUP
 export const handleSignUpSubmit = (data: IFormHandlers) => {
   loadingDispatch("START");
+  let dataOk = checkForValues(data, "signup");
+  if (!dataOk) return;
 
-  checkForValues(data, "signup");
   UserSignUp(data).then((res) => {
     if (!res) return;
 
