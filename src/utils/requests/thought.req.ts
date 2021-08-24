@@ -4,8 +4,8 @@ import { store } from "../../redux/store";
 import { IThought } from "../interfaces";
 import { checkError, RequestErrorHandler } from "./errorHandler";
 
-// const url = "https://pop-thoughts.herokuapp.com";
-const url = "http://localhost:3001";
+const url = "https://pop-thoughts.herokuapp.com";
+// const url = "http://localhost:3001";
 export const getAllThoughts = (type: "data" | "response") =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios

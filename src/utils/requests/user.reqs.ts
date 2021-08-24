@@ -8,8 +8,8 @@ import { convert } from "../convert";
 import { IUserData } from "../interfaces";
 import { checkError } from "./errorHandler";
 
-// const url = "https://pop-thoughts.herokuapp.com";
-const url = "http://localhost:3001";
+const url = "https://pop-thoughts.herokuapp.com";
+// const url = "http://localhost:3001";
 // SET USER
 export const setUserStatus = async (token: string | null) => {
   loadingDispatch("START");
