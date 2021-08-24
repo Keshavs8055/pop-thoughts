@@ -4,8 +4,8 @@ import { store } from "../../redux/store";
 import { IThought } from "../interfaces";
 import { checkError, RequestErrorHandler } from "./errorHandler";
 
-const url = "https://pop-thoughts.herokuapp.com";
-
+// const url = "https://pop-thoughts.herokuapp.com";
+const url = "http://localhost:3001";
 export const getAllThoughts = (type: "data" | "response") =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios
@@ -35,6 +35,7 @@ export const getThoughtsNextPage = (currentPage: number, limit: number) =>
       .get(`${url}/api/thoughts?limit=${limit}&page=${nextPage}`, {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         cancelToken: new axios.CancelToken((c) => (cancel = c)),
+        withCredentials: true,
       })
       .then((res) => {
         loadingDispatch("START");
@@ -69,7 +70,13 @@ export const postNewThought = (thought: IThought) =>
       trimmed: thought.trimmed.replace("\n", "\n "),
     };
     axios
-      .post(`${url}/api/thoughts`, { ...updatedThought }, {})
+      .post(
+        `${url}/api/thoughts`,
+        { ...updatedThought },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         dispatch({
           type: "UPDATE_CONTENT",
@@ -106,9 +113,13 @@ export const updateThoughtData = (
     const dispatch = store.dispatch;
 
     axios
-      .patch(`${url}/api/thoughts/${id}`, {
-        ...data,
-      })
+      .patch(
+        `${url}/api/thoughts/${id}`,
+        {
+          ...data,
+        },
+        { withCredentials: true }
+      )
       .then(() => {
         dispatch({
           type: "SET_NEW_ALERT",

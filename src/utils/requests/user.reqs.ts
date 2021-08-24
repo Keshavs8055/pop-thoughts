@@ -8,8 +8,8 @@ import { convert } from "../convert";
 import { IUserData } from "../interfaces";
 import { checkError } from "./errorHandler";
 
-const url = "https://pop-thoughts.herokuapp.com";
-
+// const url = "https://pop-thoughts.herokuapp.com";
+const url = "http://localhost:3001";
 // SET USER
 export const setUserStatus = async (token: string | null) => {
   loadingDispatch("START");
@@ -98,6 +98,7 @@ export const getUser = (id: string, token: string) =>
         headers: {
           Cookie: `jwt=${token};`,
         },
+        withCredentials: true,
       })
       .then(async (res) => {
         const data = await res;
@@ -113,7 +114,7 @@ export const GetUserThoughts = () => {
   const dispatch = store.dispatch;
   const id = store.getState().UserReducer._id;
   axios
-    .get(`${url}/api/users/thoughts/${id}`)
+    .get(`${url}/api/users/thoughts/${id}`, { withCredentials: true })
     .then((res) => {
       dispatch({
         type: "DISPLAY_USER_THOUGHTS",
@@ -150,7 +151,11 @@ export const userLogOut = () => {
 export const forgotPasswordReq = (email: string) =>
   new Promise((resolve: (val: any) => any, reject) => {
     axios
-      .post(`${url}/api/users/forgotPassword`, { email })
+      .post(
+        `${url}/api/users/forgotPassword`,
+        { email },
+        { withCredentials: true }
+      )
       .then((res) => {
         resolve(res.data);
       })
