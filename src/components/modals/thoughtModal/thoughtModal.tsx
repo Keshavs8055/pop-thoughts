@@ -71,7 +71,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const handleEditSubmit = () => {
     let check = checkError();
     if (!check) return;
-    let len = Math.random() * (300 - 250) + 250;
+    let len = Math.random() * (300 - 250) + 200;
     const trimmedString = `${content.substring(0, len)}...`;
     updateThoughtData(id, { content: content, trimmed: trimmedString }).then(
       (rs) => {

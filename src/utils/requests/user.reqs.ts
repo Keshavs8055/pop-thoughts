@@ -8,6 +8,8 @@ import { convert } from "../convert";
 import { IUserData } from "../interfaces";
 import { checkError } from "./errorHandler";
 
+axios.defaults.withCredentials = true;
+
 const url = "https://pop-thoughts.herokuapp.com";
 // const url = "http://localhost:3001";
 // SET USER
@@ -128,20 +130,31 @@ export const GetUserThoughts = () => {
 export const userLogOut = () => {
   const token = localStorage.getItem("jwt");
   const dispatch = store.dispatch;
-  dispatch({
-    type: "SET_USER",
-    payload: {
-      _id: "",
-      email: "",
-      fullName: "",
-      exist: false,
-    },
-  });
-  dispatch({
-    type: "CLOSE_ALL",
-  });
-  if (!token) return;
-  localStorage.removeItem("jwt");
+  axios
+    .get(`${url}/api/users/logOut`, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      if (res.data.status === "success") {
+        dispatch({
+          type: "SET_USER",
+          payload: {
+            _id: "",
+            email: "",
+            fullName: "",
+            exist: false,
+          },
+        });
+      }
+      dispatch({
+        type: "CLOSE_ALL",
+      });
+      if (!token) return;
+      localStorage.removeItem("jwt");
+    })
+    .catch((e) => {
+      checkError(e);
+    });
 };
 
 // FORGOT PASSWORD REQUEST

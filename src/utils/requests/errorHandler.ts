@@ -9,7 +9,6 @@ export const checkError = (error: any) => {
   } else {
     RequestErrorHandler("An Unknown Error Ocurred, please try later.");
   }
-  console.log(error.config);
 };
 
 export const RequestErrorHandler = (msg: string) => {
