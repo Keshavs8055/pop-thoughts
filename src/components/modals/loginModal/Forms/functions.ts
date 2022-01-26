@@ -1,12 +1,8 @@
+import { auth } from "../../../../firebase/firebase";
 import { loadingDispatch } from "../../../../redux/loading/loading.config";
 import { store } from "../../../../redux/store";
 import { IFormHandlers } from "../../../../utils/interfaces";
-import { checkError } from "../../../../utils/requests/errorHandler";
-import {
-  forgotPasswordReq,
-  UserLogin,
-  UserSignUp,
-} from "../../../../utils/requests/user.reqs";
+import { createUserDoc } from "../../../../firebase/firebase";
 
 const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
   const dispatch = store.dispatch;
@@ -40,47 +36,71 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
-        loadingDispatch("DISABLE");
         return false;
       }
       break;
   }
+  loadingDispatch("DISABLE");
   return true;
 };
-const dispatch = store.dispatch;
 
 // HANDLE LOGIN
-export const handleLoginSubmit = (data: IFormHandlers) => {
+export const handleLoginSubmit = async (data: IFormHandlers) => {
   loadingDispatch("START");
+
+  const dispatch = store.dispatch;
   let dataOk = checkForValues(data, "login");
   if (!dataOk) return;
-  UserLogin({
-    email: data.email,
-    password: data.password,
-    rememberMe: data.rememberMe,
-  });
-};
-// HANDLE SIGNUP
-export const handleSignUpSubmit = (data: IFormHandlers) => {
-  loadingDispatch("START");
-  let dataOk = checkForValues(data, "signup");
-  if (!dataOk) return;
 
-  UserSignUp(data).then((res) => {
-    if (!res) return;
-
-    dispatch({
-      type: "CLOSE_ALL",
-    });
+  auth.signInWithEmailAndPassword(data.email, data.password).catch((e) => {
+    console.log({ ...e });
+    let msg;
+    if (e.code === "auth/user-not-found") {
+      msg = "No User Found, Try Signing Up";
+    }
+    if (e.code === "auth/wrong-password") {
+      msg = "Make Sure The Password Is Correct.";
+    }
     dispatch({
       type: "SET_NEW_ALERT",
       payload: {
+        message: msg ? msg : "An Unknown Error Occurred, Please Try Again.",
         display: true,
-        message: "Signed Up Successfully",
-        type: 1,
+        type: 0,
       },
     });
   });
+  loadingDispatch("DISABLE");
+};
+// HANDLE SIGNUP
+export const handleSignUpSubmit = async (data: IFormHandlers) => {
+  loadingDispatch("START");
+
+  const dispatch = store.dispatch;
+  let dataOk = checkForValues(data, "signup");
+  if (!dataOk) return;
+
+  auth
+    .createUserWithEmailAndPassword(data.email, data.password)
+    .then(({ user }) => {
+      if (!user) return;
+      createUserDoc(user, data.fullName);
+      loadingDispatch("DISABLE");
+    })
+    .catch((e) => {
+      dispatch({
+        type: "SET_NEW_ALERT",
+        payload: {
+          message:
+            e.code === "auth/email-already-in-use"
+              ? "Email ALready In Use, Try Logging In"
+              : "An Unknown Error Occurred, Please Try Again.",
+          display: true,
+          type: 0,
+        },
+      });
+      loadingDispatch("DISABLE");
+    });
 };
 // HANDLE FORGOT PASSWORD
 export const handleForgotClick = (email: string) => {
@@ -95,23 +115,37 @@ export const handleForgotClick = (email: string) => {
         type: 0,
       },
     });
+
     loadingDispatch("DISABLE");
     return;
   }
-  forgotPasswordReq(email)
-    .then((res) => {
+  auth
+    .sendPasswordResetEmail(email)
+    .then(() => {
       dispatch({
         type: "SET_NEW_ALERT",
         payload: {
-          message: res.message || "Check Your Email For A Reset Password Link",
+          message: "Check Your Mail To Change Your Password",
           display: true,
           type: 1,
         },
       });
-      loadingDispatch("DISABLE");
     })
     .catch((e) => {
-      checkError(e);
-      loadingDispatch("DISABLE");
+      console.log({ ...e });
+      let msg;
+      if (e.code === "auth/user-not-found") {
+        msg = "No User With This Email, Try Signing Up";
+      }
+
+      dispatch({
+        type: "SET_NEW_ALERT",
+        payload: {
+          message: msg ? msg : "Please Try Later.",
+          display: true,
+          type: 0,
+        },
+      });
     });
+  loadingDispatch("DISABLE");
 };

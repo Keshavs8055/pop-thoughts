@@ -9,6 +9,8 @@ import {
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import React from "react";
+import { useSelector } from "react-redux";
+import { State } from "../../../redux/store";
 import { IModalProps, ITabPanel } from "../../../utils/interfaces";
 import { MainForm } from "./Forms/login.signup";
 
@@ -29,6 +31,11 @@ function TabPanel(props: ITabPanel) {
 
 export const LoginModal: React.FC<IModalProps> = ({ closeFunction }) => {
   const [value, setValue] = React.useState(0);
+  const user = useSelector((state: State) => state.UserReducer.exist);
+
+  if (user) {
+    closeFunction();
+  }
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);

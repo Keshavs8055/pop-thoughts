@@ -2,13 +2,14 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { CustomAppBar } from "../../AppBar/appbar";
-import { State } from "../../../redux/store";
+import { State, store } from "../../../redux/store";
 import { CustomLoading } from "../../Loading/loading";
 import { IModalProps } from "../../../utils/interfaces";
 import { Post } from "../../card/card";
-import { userLogOut } from "../../../utils/requests/user.reqs";
+import { auth } from "../../../firebase/firebase";
 
 export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
+  const dispatch = store.dispatch;
   // GET STATE
   const User = useSelector((state: State) => state.UserReducer);
   const posts = useSelector(
@@ -16,6 +17,23 @@ export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
   );
   // LOADING STATE
   const loading = useSelector((state: State) => state.LoadingReducer.loading);
+
+  const handleSignOut = () => {
+    auth.signOut().then(() => {
+      dispatch({
+        type: "SET_USER",
+        payload: {
+          _id: "",
+          email: "",
+          fullName: "",
+          exist: false,
+        },
+      });
+      dispatch({
+        type: "CLOSE_ALL",
+      });
+    });
+  };
 
   // COMPONENT
   return (
@@ -37,7 +55,7 @@ export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
             {User.email}
           </Typography>
         </Box>
-        <Button variant="contained" onClick={userLogOut}>
+        <Button variant="contained" onClick={handleSignOut}>
           Log Out
         </Button>
       </Box>

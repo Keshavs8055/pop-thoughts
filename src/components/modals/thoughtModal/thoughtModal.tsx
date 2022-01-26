@@ -12,10 +12,8 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import {
-  postNewThought,
-  updateThoughtData,
-} from "../../../utils/requests/thought.req";
+import { firestore } from "../../../firebase/firebase";
+import { loadingDispatch } from "../../../redux/loading/loading.config";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
@@ -56,29 +54,61 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
     return true;
   };
-  const handleSubmit = () => {
+  const user = useSelector((state: State) => state.UserReducer);
+  const handleSubmit = async () => {
+    loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    let len = Math.random() * (300 - 250) + 250;
-    const trimmedString = `${content.substring(0, len)}...`;
-    postNewThought({
-      content: content,
-      dateCreated: new Date(),
-      trimmed: trimmedString,
-    });
+    const trimmedString = `${content.substring(
+      0,
+      Math.random() * (300 - 250) + 250
+    )}...`;
+    const thoughtID = `${user._id}${Date.now()}`;
+
+    loadingDispatch("DISABLE");
   };
   const { id } = useSelector((state: State) => state.ThoughtToDisplay);
   const handleEditSubmit = () => {
+    loadingDispatch("START");
     let check = checkError();
     if (!check) return;
     let len = Math.random() * (300 - 250) + 200;
     const trimmedString = `${content.substring(0, len)}...`;
-    updateThoughtData(id, { content: content, trimmed: trimmedString }).then(
-      (rs) => {
-        dispatch({ type: Types.modalTypes.CLOSE_ALL });
-      }
-    );
+
+    firestore
+      .collection("thoughts")
+      .doc(id)
+      .update({
+        content,
+        trimmed: trimmedString,
+      })
+      .then(() => {
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 1,
+            message: "Successfully Updated",
+          },
+        });
+        dispatch({
+          type: Types.modalTypes.CLOSE_ALL,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 0,
+            message: "An Unknown Error Occurred, Please Try Later.",
+          },
+        });
+      });
     // CLOSE WHEN DONE;
+    loadingDispatch("DISABLE");
   };
   return (
     <>

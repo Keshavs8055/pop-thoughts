@@ -4,9 +4,7 @@ import { CustomLoading } from "../../components/Loading/loading";
 import { Post } from "./../../components/card/card";
 import { useSelector } from "react-redux";
 import { State } from "../../redux/store";
-import { getThoughtsNextPage } from "../../utils/requests/thought.req";
 import { loadingDispatch } from "../../redux/loading/loading.config";
-import { checkError } from "../../utils/requests/errorHandler";
 
 const Homepage = () => {
   // COMPOENT STATE
@@ -43,21 +41,6 @@ const Homepage = () => {
       setCurrentPage(currentPage);
       return;
     }
-    getThoughtsNextPage(currentPage, 16)
-      .then((res) => {
-        if (!res) {
-          togglePostLoading(false);
-          setMakeMoreRequests(false);
-          loadingDispatch("DISABLE");
-          return;
-        }
-        togglePostLoading(false);
-      })
-      .catch((e) => {
-        loadingDispatch("DISABLE");
-        togglePostLoading(false);
-        checkError(e);
-      });
   }, [currentPage, makeMoreRequests]);
   return (
     <Box style={{ minHeight: "102vh" }}>

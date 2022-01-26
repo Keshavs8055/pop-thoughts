@@ -2,10 +2,9 @@ import {
   Box,
   Button,
   FormControl,
-  FormControlLabel,
   FormHelperText,
-  Checkbox,
   TextField,
+  ButtonGroup,
 } from "@material-ui/core";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,25 +16,11 @@ import {
 } from "./functions";
 import { State } from "../../../../redux/store";
 import { CustomLoading } from "../../../Loading/loading";
-import { Types } from "../../../../redux/types";
+import { signInWithGoogle } from "../../../../firebase/firebase";
+import { loadingDispatch } from "../../../../redux/loading/loading.config";
 
 type IMainForm = {
   variant: "login" | "signup";
-};
-interface IRememberMeButon {
-  state: boolean;
-  handler: () => void;
-}
-
-const RememberMe: React.FC<IRememberMeButon> = ({ state, handler }) => {
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox checked={state} onChange={handler} name="Remember Me" />
-      }
-      label="Remember Me"
-    />
-  );
 };
 
 export const MainForm: React.FC<IMainForm> = ({ variant }) => {
@@ -59,7 +44,6 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   const btnLoading = useSelector(
     (state: State) => state.LoadingReducer.loading
   );
-  const dispatch = useDispatch();
   //**************
   //INPUT CHANGE
   //**************
@@ -68,7 +52,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
   ) => {
     const { name, value } = e.currentTarget;
     await setValue({ ...values, [name]: value });
-    dispatch({ type: Types.loading.DISABLE_LOADING });
+    loadingDispatch("DISABLE");
     switch (name) {
       case "email":
         let re = /\S+@\S+\.\S+/;
@@ -127,17 +111,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               color="primary"
               onChange={handleChange}
             ></TextField>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <RememberMe
-                state={values.rememberMe}
-                handler={() =>
-                  setValue({ ...values, rememberMe: !values.rememberMe })
-                }
-              />
+            <Box display="flex" paddingTop={1}>
               <Button
                 variant="text"
                 onClick={() => handleForgotClick(values.email)}
@@ -146,16 +120,26 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
               </Button>
             </Box>
           </FormControl>
-          <Button
-            color="primary"
-            disabled={errors.email || errors.password || btnLoading}
-            onClick={() => {
-              handleLoginSubmit({ ...values });
-            }}
-            variant="contained"
-          >
-            Login
-          </Button>
+          <ButtonGroup>
+            <Button
+              color="primary"
+              disabled={errors.email || errors.password || btnLoading}
+              onClick={() => {
+                handleLoginSubmit({ ...values });
+              }}
+              variant="contained"
+            >
+              Login
+            </Button>
+            <Button
+              color="primary"
+              disabled={errors.email || errors.password || btnLoading}
+              onClick={signInWithGoogle}
+              variant="outlined"
+            >
+              Sign-In With Google
+            </Button>
+          </ButtonGroup>
 
           {btnLoading ? <CustomLoading variant="global" /> : null}
         </Box>
