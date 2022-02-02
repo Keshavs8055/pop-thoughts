@@ -60,6 +60,7 @@ export const MainForm: React.FC<IMainForm> = ({ variant }) => {
         break;
       case "fullName":
         let n_re = /^[a-zA-Z\s]*$/;
+
         setError({ ...errors, fullName: !n_re.test(value) });
         break;
       case "password":

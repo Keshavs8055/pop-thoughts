@@ -45,7 +45,6 @@ const Homepage = () => {
         });
       })
       .catch((e) => {
-        console.log(e);
         dispatch({
           type: "SET_NEW_ALERT",
           payload: {
@@ -61,7 +60,7 @@ const Homepage = () => {
       setCurrentPage(currentPage);
       return;
     }
-  }, [currentPage, makeMoreRequests]);
+  }, [currentPage, makeMoreRequests, dispatch]);
   return (
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}

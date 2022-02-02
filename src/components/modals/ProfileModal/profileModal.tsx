@@ -19,6 +19,7 @@ export const ProfileModal: React.FC<IModalProps> = ({ closeFunction }) => {
   const loading = useSelector((state: State) => state.LoadingReducer.loading);
 
   useEffect(() => {
+    if (User._id === "") return;
     loadingDispatch("START");
     getFirestoreDoc(`users/${User._id}`).then((data) => {
       if (!data) return;

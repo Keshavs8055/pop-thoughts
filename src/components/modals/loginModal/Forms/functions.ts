@@ -2,10 +2,10 @@ import { auth } from "../../../../firebase/firebase";
 import { loadingDispatch } from "../../../../redux/loading/loading.config";
 import { store } from "../../../../redux/store";
 import { IFormHandlers } from "../../../../utils/interfaces";
-import { createUserDoc } from "../../../../firebase/firebase";
 
 const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
   const dispatch = store.dispatch;
+  let mainReturn: boolean = true;
   switch (type) {
     case "login":
       if (values.email.length < 1 || values.password.length < 1) {
@@ -18,7 +18,7 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
           },
         });
         loadingDispatch("DISABLE");
-        return false;
+        mainReturn = false;
       }
       break;
     case "signup":
@@ -36,12 +36,12 @@ const checkForValues = (values: IFormHandlers, type: "login" | "signup") => {
             type: 0,
           },
         });
-        return false;
+        mainReturn = false;
       }
       break;
   }
   loadingDispatch("DISABLE");
-  return true;
+  return mainReturn;
 };
 
 // HANDLE LOGIN
@@ -52,8 +52,9 @@ export const handleLoginSubmit = async (data: IFormHandlers) => {
   let dataOk = checkForValues(data, "login");
   if (!dataOk) return;
 
-  auth.signInWithEmailAndPassword(data.email, data.password).catch((e) => {
-    console.log({ ...e });
+  try {
+    auth.signInWithEmailAndPassword(data.email, data.password);
+  } catch (e: any) {
     let msg;
     if (e.code === "auth/user-not-found") {
       msg = "No User Found, Try Signing Up";
@@ -69,38 +70,20 @@ export const handleLoginSubmit = async (data: IFormHandlers) => {
         type: 0,
       },
     });
-  });
+  }
   loadingDispatch("DISABLE");
 };
 // HANDLE SIGNUP
 export const handleSignUpSubmit = async (data: IFormHandlers) => {
   loadingDispatch("START");
-
   const dispatch = store.dispatch;
   let dataOk = checkForValues(data, "signup");
   if (!dataOk) return;
-
-  auth
-    .createUserWithEmailAndPassword(data.email, data.password)
-    .then(({ user }) => {
-      if (!user) return;
-      createUserDoc(user, data.fullName);
-      loadingDispatch("DISABLE");
-    })
-    .catch((e) => {
-      dispatch({
-        type: "SET_NEW_ALERT",
-        payload: {
-          message:
-            e.code === "auth/email-already-in-use"
-              ? "Email ALready In Use, Try Logging In"
-              : "An Unknown Error Occurred, Please Try Again.",
-          display: true,
-          type: 0,
-        },
-      });
-      loadingDispatch("DISABLE");
-    });
+  dispatch({
+    type: "SET_DISPLAY_NAME",
+    payload: data.fullName,
+  });
+  auth.createUserWithEmailAndPassword(data.email, data.password);
 };
 // HANDLE FORGOT PASSWORD
 export const handleForgotClick = (email: string) => {
@@ -132,7 +115,6 @@ export const handleForgotClick = (email: string) => {
       });
     })
     .catch((e) => {
-      console.log({ ...e });
       let msg;
       if (e.code === "auth/user-not-found") {
         msg = "No User With This Email, Try Signing Up";

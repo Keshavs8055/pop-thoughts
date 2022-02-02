@@ -7,13 +7,16 @@ import { CustomAppBar } from "./components/AppBar/appbar";
 import { AlertComponent } from "./components/Alert/AlertComponent";
 
 import { auth, createUserDoc } from "./firebase/firebase";
-import { store } from "./redux/store";
+import { State, store } from "./redux/store";
 import { IUserState } from "./redux/user/user.config";
 import { loadingDispatch } from "./redux/loading/loading.config";
+import { useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = store.dispatch;
-
+  const displayName = useSelector(
+    (state: State) => state.NameReducer.displayName
+  );
   useEffect(() => {
     loadingDispatch("START");
     const unsub = auth.onAuthStateChanged(async (u) => {
@@ -22,7 +25,9 @@ const App = () => {
         return;
       }
 
-      const userRef = await createUserDoc(u);
+      const userRef = await createUserDoc(u, {
+        displayName: displayName.length > 0 ? displayName : u.displayName,
+      });
       if (userRef) {
         userRef.onSnapshot((snap) => {
           const data = snap.data();
@@ -44,7 +49,7 @@ const App = () => {
       dispatch({ type: "CLOSE_ALL" });
     });
     return unsub;
-  }, [dispatch]);
+  }, [dispatch, displayName]);
   return (
     <ThemeProvider theme={Theme}>
       <CustomAppBar variant="NavBar" />

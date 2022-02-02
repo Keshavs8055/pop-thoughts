@@ -112,7 +112,6 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
             if (doc.exists) {
               firestore.collection("thoughts").doc(thoughtID).delete();
             }
-            console.log(e);
             dispatch({
               type: Types.alertTypes.SET_NEW_ALERT,
               payload: {
@@ -124,7 +123,6 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           });
       })
       .catch((e) => {
-        console.log(e);
         dispatch({
           type: Types.alertTypes.SET_NEW_ALERT,
           payload: {
@@ -168,8 +166,6 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
         });
       })
       .catch((e) => {
-        console.log(e);
-
         dispatch({
           type: Types.alertTypes.SET_NEW_ALERT,
           payload: {

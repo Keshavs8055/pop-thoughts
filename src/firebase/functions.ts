@@ -37,8 +37,6 @@ export const getFirestoreCollection = (name: string, page: number) =>
       .getState()
       .ThoughtsReducer.displayThoughts.slice(-1)[0];
 
-    console.log(page);
-
     firestore
       .collection(name)
       .orderBy("content")
