@@ -14,6 +14,7 @@ import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
 import { firestore } from "../../../firebase/firebase";
 import { loadingDispatch } from "../../../redux/loading/loading.config";
+import { arrayUnion } from "firebase/firestore";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
@@ -32,7 +33,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   ) => {
     const { name, value } = e.currentTarget;
     dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-    if (value.length < 250 || value.length > 1000) {
+    if (value.length < 500 || value.length > 1000) {
       setError({ ...errors, [name]: true });
     } else {
       setError({ ...errors, [name]: false });
@@ -54,25 +55,96 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
     return true;
   };
+  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
   const user = useSelector((state: State) => state.UserReducer);
+
+  //**************
+  //SUBMIT A NEW THOUGHT
+  //**************
+
   const handleSubmit = async () => {
     loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    const trimmedString = `${content.substring(
-      0,
-      Math.random() * (300 - 250) + 250
-    )}...`;
+    const trimmed = `${content.substring(0, 225)}...`;
+
     const thoughtID = `${user._id}${Date.now()}`;
+    firestore
+      .collection("thoughts")
+      .doc(thoughtID)
+      .set({
+        createdAt: Date.now(),
+        trimmed,
+        content,
+        author: user.fullName,
+      })
+      .then((doc) => {
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayUnion({
+              createdAt: Date.now(),
+              createdBy: firestore.collection("users").doc(user._id),
+              trimmed,
+              content,
+              author: user.fullName,
+            }),
+          })
+          .then(() => {
+            dispatch({
+              type: Types.alertTypes.SET_NEW_ALERT,
+              payload: {
+                display: true,
+                type: 1,
+                message: "Your Thought has been posted.",
+              },
+            });
+            dispatch({
+              type: "CLOSE_ALL",
+            });
+          })
+          .catch(async (e) => {
+            const doc = await firestore
+              .collection("thoughts")
+              .doc(thoughtID)
+              .get();
+            if (doc.exists) {
+              firestore.collection("thoughts").doc(thoughtID).delete();
+            }
+            console.log(e);
+            dispatch({
+              type: Types.alertTypes.SET_NEW_ALERT,
+              payload: {
+                display: true,
+                type: 0,
+                message: "Error While Uploading Your Thought.",
+              },
+            });
+          });
+      })
+      .catch((e) => {
+        console.log(e);
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 0,
+            message: "Error While Uploading Your Thought.",
+          },
+        });
+      });
 
     loadingDispatch("DISABLE");
   };
-  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
+  //**************
+  //EDIT AN EXISTING THOUGHT
+  //**************
   const handleEditSubmit = () => {
     loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    let len = Math.random() * (300 - 250) + 200;
+    let len = 225;
     const trimmedString = `${content.substring(0, len)}...`;
 
     firestore
@@ -120,7 +192,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       <Box maxWidth="900px" width="96%" margin="2% auto" marginTop={2}>
         <FormControl className={classes.inputField} fullWidth>
           <TextareaAutosize
-            placeholder="Thought.."
+            placeholder="Drop Your Views"
             name="thought"
             color="primary"
             rowsMin={9}
@@ -131,14 +203,14 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           />
           {errors.thought ? (
             <FormHelperText className={classes.helperText}>
-              Try To Think Big(Must be from 250 chars to 1000 chars)
+              Try To Think Big(Must be from 500 chars to 1000 chars)
             </FormHelperText>
           ) : null}
         </FormControl>
         {modalEditorMode ? (
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleEditSubmit}
             disabled={loading || errors.thought}
           >

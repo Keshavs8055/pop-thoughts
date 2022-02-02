@@ -43,7 +43,7 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
               marginBottom={2}
               whiteSpace="pre-line"
             ></Box>
-            <Typography variant="body2" component="p">
+            <Typography variant="subtitle1" component="p">
               {post.trimmed}
             </Typography>
           </CardContent>

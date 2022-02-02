@@ -107,7 +107,8 @@ export const LoadingStyles = makeStyles(
     },
     circularLoadingBox: {
       width: "100vw",
-      position: "fixed",
+      position: "relative",
+      zIndex: 0,
       bottom: 0,
       left: "50%",
       transform: "translate(-50%, 0)",

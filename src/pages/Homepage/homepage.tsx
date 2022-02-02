@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
 import { Post } from "./../../components/card/card";
 import { useSelector } from "react-redux";
-import { State } from "../../redux/store";
-import { loadingDispatch } from "../../redux/loading/loading.config";
+import { State, store } from "../../redux/store";
+import { getFirestoreCollection } from "../../firebase/functions";
 
 const Homepage = () => {
   // COMPOENT STATE
@@ -16,7 +16,7 @@ const Homepage = () => {
     (state: State) => state.ThoughtsReducer.displayThoughts
   );
   const loading = useSelector((state: State) => state.LoadingReducer.loading);
-
+  const dispatch = store.dispatch;
   // SCROLL HANDLER
   useEffect(() => {
     const HandleScroll = (e: any) => {
@@ -36,6 +36,26 @@ const Homepage = () => {
 
   useEffect(() => {
     togglePostLoading(true);
+    getFirestoreCollection("thoughts", currentPage)
+      .then((data) => {
+        if (!data) return;
+        dispatch({
+          type: "FECTH_NEW",
+          payload: data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        dispatch({
+          type: "SET_NEW_ALERT",
+          payload: {
+            message: "No More Thoughts Available",
+            display: true,
+            type: 0,
+          },
+        });
+        setMakeMoreRequests(false);
+      });
     if (!makeMoreRequests) {
       togglePostLoading(false);
       setCurrentPage(currentPage);
@@ -45,11 +65,14 @@ const Homepage = () => {
   return (
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
-      <Grid container alignItems="center" justify="center" spacing={2}>
+      <Grid container alignItems="stretch" justify="center" spacing={2}>
         {posts && posts.length > 0 ? (
-          posts.map((post, i) => {
-            return <Post post={{ ...post }} key={i} userPost={false} />;
-          })
+          <>
+            {posts.map((post, i) => {
+              return <Post post={{ ...post }} key={i} userPost={false} />;
+            })}
+            {postLoading ? <CustomLoading variant="circlular" /> : null}
+          </>
         ) : (
           <Box marginTop="10px">
             <Typography variant="subtitle1" align="center" color="textPrimary">
@@ -58,7 +81,6 @@ const Homepage = () => {
           </Box>
         )}
       </Grid>
-      {postLoading ? <CustomLoading variant="circlular" /> : null}
     </Box>
   );
 };

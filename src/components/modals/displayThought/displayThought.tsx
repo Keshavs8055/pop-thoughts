@@ -21,7 +21,7 @@ export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
         padding={2}
         whiteSpace="pre-line"
       >
-        <Typography align="left" variant="body1">
+        <Typography align="left" variant="h6">
           {post.content}
         </Typography>
       </Box>

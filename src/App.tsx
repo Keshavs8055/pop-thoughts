@@ -21,7 +21,6 @@ const App = () => {
         loadingDispatch("DISABLE");
         return;
       }
-      console.log(u);
 
       const userRef = await createUserDoc(u);
       if (userRef) {
@@ -42,6 +41,7 @@ const App = () => {
         });
         loadingDispatch("DISABLE");
       }
+      dispatch({ type: "CLOSE_ALL" });
     });
     return unsub;
   }, [dispatch]);

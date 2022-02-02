@@ -36,7 +36,7 @@ export const createUserDoc = async (userAuth: firebase.User, name?: string) => {
         displayName: displayName || name,
         email,
         createdAt,
-        thoughts: null,
+        thoughts: [],
       });
     } catch (error) {
       console.log(error);
