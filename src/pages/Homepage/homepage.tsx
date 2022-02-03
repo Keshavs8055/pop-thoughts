@@ -64,7 +64,7 @@ const Homepage = () => {
   return (
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
-      <Grid container alignItems="stretch" justify="center" spacing={2}>
+      <Grid container zeroMinWidth alignItems="stretch" justify="center">
         {posts && posts.length > 0 ? (
           <>
             {posts.map((post, i) => {
