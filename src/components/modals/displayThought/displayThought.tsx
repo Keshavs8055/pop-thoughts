@@ -15,11 +15,8 @@ export const DisplayThought: React.FC<IModalProps> = ({ closeFunction }) => {
       />
       <Box
         maxWidth="900px"
-        marginLeft="auto"
-        marginRight="auto"
-        marginTop={2}
         padding={2}
-        whiteSpace="pre-line"
+        style={{ overflowX: "hidden", height: "auto", wordWrap: "break-word" }}
       >
         <Typography align="left" variant="h6">
           {post.content}

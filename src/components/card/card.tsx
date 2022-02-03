@@ -36,14 +36,8 @@ export const Post: React.FC<IPostComp> = ({ userPost, post }) => {
       <Box position="relative" height="100%" padding={2}>
         <Card className={classes.root} variant="outlined">
           <CardContent>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              marginBottom={2}
-              whiteSpace="pre-line"
-            ></Box>
-            <Typography variant="subtitle1" component="p">
+            <Box marginBottom={2}></Box>
+            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
               {post.trimmed}
             </Typography>
           </CardContent>
