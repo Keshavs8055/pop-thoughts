@@ -4,6 +4,9 @@ body {
   text-transform: capitalize;
   background-color: #040404;
 }
+* {
+  max-width: calc(100vw - (100% - 100vw)) !important;
+}
 p,
 div,
 span,
