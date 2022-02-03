@@ -64,13 +64,15 @@ const Homepage = () => {
   return (
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
-      <Grid container zeroMinWidth alignItems="stretch" justify="center">
+      <Grid container>
         {posts && posts.length > 0 ? (
-          <>
-            {posts.map((post, i) => {
-              return <Post post={{ ...post }} key={i} userPost={false} />;
-            })}
-          </>
+          posts.map((post, i) => {
+            return (
+              <Grid item xs={12} md={8} lg={6} key={i} zeroMinWidth>
+                <Post post={{ ...post }} userPost={false} />
+              </Grid>
+            );
+          })
         ) : (
           <Box marginTop="10px">
             <Typography variant="subtitle1" align="center" color="textPrimary">

@@ -53,7 +53,7 @@ export const NavStyles = makeStyles(
 export const CardStyles = makeStyles(
   {
     root: {
-      minWidth: 275,
+      // minWidth: 275,
     },
     bullet: {
       display: "inline-block",

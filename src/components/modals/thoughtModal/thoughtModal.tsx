@@ -33,7 +33,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   ) => {
     const { name, value } = e.currentTarget;
     dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-    if (value.length < 500 || value.length > 1000) {
+    if (value.trimStart().trimEnd().length < 100 || value.length > 1000) {
       setError({ ...errors, [name]: true });
     } else {
       setError({ ...errors, [name]: false });
@@ -66,7 +66,10 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    const trimmed = `${content.substring(0, 225)}...`;
+    let trimmed = `${content.substring(0, 75)}...`;
+    if (content.length < 150) {
+      trimmed = content;
+    }
 
     const thoughtID = `${user._id}${Date.now()}`;
     firestore
@@ -156,15 +159,16 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    let len = 225;
-    const trimmedString = `${content.substring(0, len)}...`;
-
+    let trimmed = `${content.substring(0, 75)}...`;
+    if (content.length < 150) {
+      trimmed = content;
+    }
     firestore
       .collection("thoughts")
       .doc(currentThought.id)
       .update({
         content,
-        trimmed: trimmedString,
+        trimmed,
       })
       .then(() => {
         firestore
@@ -181,7 +185,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
             thoughts: arrayUnion({
               ...currentThought,
               content,
-              trimmed: trimmedString,
+              trimmed,
             }),
           });
         dispatch({
@@ -230,7 +234,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           />
           {errors.thought ? (
             <FormHelperText className={classes.helperText}>
-              Try To Think Big(Must be from 500 chars to 1000 chars)
+              Try To Think Big(Must be from 100 chars to 1000 chars)
             </FormHelperText>
           ) : null}
         </FormControl>
