@@ -70,7 +70,6 @@ const Homepage = () => {
             {posts.map((post, i) => {
               return <Post post={{ ...post }} key={i} userPost={false} />;
             })}
-            {postLoading ? <CustomLoading variant="circlular" /> : null}
           </>
         ) : (
           <Box marginTop="10px">
@@ -80,6 +79,11 @@ const Homepage = () => {
           </Box>
         )}
       </Grid>
+      {postLoading ? (
+        <Typography variant="subtitle1" align="center" color="textPrimary">
+          Scroll For More
+        </Typography>
+      ) : null}
     </Box>
   );
 };

@@ -14,7 +14,7 @@ import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
 import { firestore } from "../../../firebase/firebase";
 import { loadingDispatch } from "../../../redux/loading/loading.config";
-import { arrayUnion } from "firebase/firestore";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
@@ -55,7 +55,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
     return true;
   };
-  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
+  const currentThought = useSelector((state: State) => state.ThoughtToDisplay);
   const user = useSelector((state: State) => state.UserReducer);
 
   //**************
@@ -89,6 +89,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
               trimmed,
               content,
               author: user.fullName,
+              id: thoughtID,
             }),
           })
           .then(() => {
@@ -99,6 +100,19 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
                 type: 1,
                 message: "Your Thought has been posted.",
               },
+            });
+            dispatch({
+              type: Types.displayTypes.NEW_THOUGHT_ADDED,
+              payload: [
+                {
+                  createdAt: Date.now(),
+                  createdBy: firestore.collection("users").doc(user._id),
+                  trimmed,
+                  content,
+                  author: user.fullName,
+                  id: thoughtID,
+                },
+              ],
             });
             dispatch({
               type: "CLOSE_ALL",
@@ -147,12 +161,29 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
 
     firestore
       .collection("thoughts")
-      .doc(id)
+      .doc(currentThought.id)
       .update({
         content,
         trimmed: trimmedString,
       })
       .then(() => {
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayRemove({ ...currentThought }),
+          });
+
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayUnion({
+              ...currentThought,
+              content,
+              trimmed: trimmedString,
+            }),
+          });
         dispatch({
           type: Types.alertTypes.SET_NEW_ALERT,
           payload: {
