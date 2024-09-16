@@ -1,40 +1,68 @@
+import React, { useEffect } from "react";
 import { Box, Container, ThemeProvider } from "@material-ui/core";
-import { useEffect } from "react";
 import Homepage from "./pages/Homepage/homepage";
 import { Modals } from "./components/modals/modals";
 import { Theme } from "./utils/theme";
 import { CustomAppBar } from "./components/AppBar/appbar";
 import { AlertComponent } from "./components/Alert/AlertComponent";
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ForgotPasswordPage } from "./pages/forgotPassword/forgotPasswordForm";
-import { setUserStatus } from "./utils/requests/user.reqs";
+import { auth, createUserDoc } from "./firebase/firebase";
+import { State, store } from "./redux/store";
+import { IUserState } from "./redux/user/user.config";
+import { loadingDispatch } from "./redux/loading/loading.config";
+import { useSelector } from "react-redux";
 
-function App() {
+const App = () => {
+  const dispatch = store.dispatch;
+  const displayName = useSelector(
+    (state: State) => state.NameReducer.displayName
+  );
   useEffect(() => {
-    setUserStatus(localStorage.getItem("jwt"));
-  });
+    loadingDispatch("START");
+    const unsub = auth.onAuthStateChanged(async (u) => {
+      if (!u) {
+        loadingDispatch("DISABLE");
+        return;
+      }
+
+      const userRef = await createUserDoc(u, {
+        displayName: displayName.length > 0 ? displayName : u.displayName,
+      });
+      if (userRef) {
+        userRef.onSnapshot((snap) => {
+          const data = snap.data();
+          if (!data) return;
+
+          const user: IUserState = {
+            email: data.email,
+            fullName: data.displayName,
+            _id: snap.id,
+            exist: true,
+          };
+          dispatch({
+            type: "SET_USER",
+            payload: user,
+          });
+        });
+        loadingDispatch("DISABLE");
+      }
+      dispatch({ type: "CLOSE_ALL" });
+    });
+    return unsub;
+  }, [dispatch, displayName]);
   return (
     <ThemeProvider theme={Theme}>
-      <Router>
-        <Switch>
-          <Route path="/forgotpassword">
-            <ForgotPasswordPage />
-          </Route>
-          <Route path="/">
-            <CustomAppBar variant="NavBar" />
-            <Container>
-              <Box my={1}>
-                <Homepage />
-                <Modals />
-              </Box>
-            </Container>
-          </Route>
-        </Switch>
-      </Router>
+      <CustomAppBar variant="NavBar" />
+      <Container>
+        <Box my={1}>
+          <Homepage />
+          <Modals />
+        </Box>
+      </Container>
+
       <AlertComponent />
     </ThemeProvider>
   );
-}
+};
 
 export default App;

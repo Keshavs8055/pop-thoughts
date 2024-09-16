@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { CustomLoading } from "../../components/Loading/loading";
 import { Post } from "./../../components/card/card";
 import { useSelector } from "react-redux";
-import { State } from "../../redux/store";
-import { getThoughtsNextPage } from "../../utils/requests/thought.req";
-import { loadingDispatch } from "../../redux/loading/loading.config";
+import { State, store } from "../../redux/store";
+import { getFirestoreCollection } from "../../firebase/functions";
 
 const Homepage = () => {
   // COMPOENT STATE
@@ -17,7 +16,7 @@ const Homepage = () => {
     (state: State) => state.ThoughtsReducer.displayThoughts
   );
   const loading = useSelector((state: State) => state.LoadingReducer.loading);
-
+  const dispatch = store.dispatch;
   // SCROLL HANDLER
   useEffect(() => {
     const HandleScroll = (e: any) => {
@@ -37,43 +36,56 @@ const Homepage = () => {
 
   useEffect(() => {
     togglePostLoading(true);
+    getFirestoreCollection("thoughts", currentPage)
+      .then((data) => {
+        if (!data) return;
+        dispatch({
+          type: "FECTH_NEW",
+          payload: data,
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: "SET_NEW_ALERT",
+          payload: {
+            message: "No More Thoughts Available",
+            display: true,
+            type: 0,
+          },
+        });
+        setMakeMoreRequests(false);
+      });
     if (!makeMoreRequests) {
       togglePostLoading(false);
       setCurrentPage(currentPage);
       return;
     }
-    getThoughtsNextPage(currentPage, 15)
-      .then((res) => {
-        if (!res) {
-          togglePostLoading(false);
-          setMakeMoreRequests(false);
-          loadingDispatch("DISABLE");
-          return;
-        }
-        togglePostLoading(false);
-      })
-      .catch((e) => {
-        loadingDispatch("DISABLE");
-        togglePostLoading(false);
-      });
-  }, [currentPage, makeMoreRequests]);
+  }, [currentPage, makeMoreRequests, dispatch]);
   return (
     <Box style={{ minHeight: "102vh" }}>
       {loading ? <CustomLoading variant="global" /> : null}
-      <Grid container alignItems="center" justify="center" spacing={2}>
+      <Grid container>
         {posts && posts.length > 0 ? (
           posts.map((post, i) => {
-            return <Post post={{ ...post }} key={i} userPost={false} />;
+            return (
+              <Grid item xs={12} md={8} lg={6} key={i} zeroMinWidth>
+                <Post post={{ ...post }} userPost={false} />
+              </Grid>
+            );
           })
         ) : (
           <Box marginTop="10px">
-            <Typography variant="h2" align="center" color="textPrimary">
+            <Typography variant="subtitle1" align="center" color="textPrimary">
               This is the time to let the world know what you think!
             </Typography>
           </Box>
         )}
       </Grid>
-      {postLoading ? <CustomLoading variant="circlular" /> : null}
+      {postLoading ? (
+        <Typography variant="subtitle1" align="center" color="textPrimary">
+          Scroll For More
+        </Typography>
+      ) : null}
     </Box>
   );
 };

@@ -6,6 +6,7 @@ import { ThoughtsReducer } from "./displayThoughts/thoughts.reducer";
 import { LoadingReducer } from "./loading/loading.reducer";
 import { ThoughtToDisplay } from "./thoughtToDisplay/display.reducer";
 import { UserReducer } from "./user/user.reducer";
+import { NameReducer } from "./name/name";
 // ROOT REDUCER
 const Reducers = combineReducers({
   ModalReducer,
@@ -15,15 +16,10 @@ const Reducers = combineReducers({
   LoadingReducer,
   ThoughtToDisplay,
   UserReducer,
+  NameReducer,
 });
 
 //STORE
-export const store = createStore(
-  Reducers,
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__({
-      trace: true,
-    })
-);
+export const store = createStore(Reducers);
 
 export type State = ReturnType<typeof Reducers>;

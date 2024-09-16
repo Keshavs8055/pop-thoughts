@@ -12,10 +12,9 @@ import { CustomAppBar } from "../../AppBar/appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../redux/store";
 import { Types } from "../../../redux/types";
-import {
-  postNewThought,
-  updateThoughtData,
-} from "../../../utils/requests/thought.req";
+import { firestore } from "../../../firebase/firebase";
+import { loadingDispatch } from "../../../redux/loading/loading.config";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
 
 export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   const classes = FormStyles();
@@ -34,7 +33,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
   ) => {
     const { name, value } = e.currentTarget;
     dispatch({ type: Types.thoughtTypes.UPDATE_CONTENT, payload: value });
-    if (value.length < 250 || value.length > 1000) {
+    if (value.trimStart().trimEnd().length < 100 || value.length > 1000) {
       setError({ ...errors, [name]: true });
     } else {
       setError({ ...errors, [name]: false });
@@ -56,29 +55,163 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
     }
     return true;
   };
-  const handleSubmit = () => {
+  const currentThought = useSelector((state: State) => state.ThoughtToDisplay);
+  const user = useSelector((state: State) => state.UserReducer);
+
+  //**************
+  //SUBMIT A NEW THOUGHT
+  //**************
+
+  const handleSubmit = async () => {
+    loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    let len = Math.random() * (300 - 250) + 250;
-    const trimmedString = `${content.substring(0, len)}...`;
-    postNewThought({
-      content: content,
-      dateCreated: new Date(),
-      trimmed: trimmedString,
-    });
+    let trimmed = `${content.substring(0, 75)}...`;
+    if (content.length < 150) {
+      trimmed = content;
+    }
+
+    const thoughtID = `${user._id}${Date.now()}`;
+    firestore
+      .collection("thoughts")
+      .doc(thoughtID)
+      .set({
+        createdAt: Date.now(),
+        trimmed,
+        content,
+        author: user.fullName,
+      })
+      .then((doc) => {
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayUnion({
+              createdAt: Date.now(),
+              createdBy: firestore.collection("users").doc(user._id),
+              trimmed,
+              content,
+              author: user.fullName,
+              id: thoughtID,
+            }),
+          })
+          .then(() => {
+            dispatch({
+              type: Types.alertTypes.SET_NEW_ALERT,
+              payload: {
+                display: true,
+                type: 1,
+                message: "Your Thought has been posted.",
+              },
+            });
+            dispatch({
+              type: Types.displayTypes.NEW_THOUGHT_ADDED,
+              payload: [
+                {
+                  createdAt: Date.now(),
+                  createdBy: firestore.collection("users").doc(user._id),
+                  trimmed,
+                  content,
+                  author: user.fullName,
+                  id: thoughtID,
+                },
+              ],
+            });
+            dispatch({
+              type: "CLOSE_ALL",
+            });
+          })
+          .catch(async (e) => {
+            const doc = await firestore
+              .collection("thoughts")
+              .doc(thoughtID)
+              .get();
+            if (doc.exists) {
+              firestore.collection("thoughts").doc(thoughtID).delete();
+            }
+            dispatch({
+              type: Types.alertTypes.SET_NEW_ALERT,
+              payload: {
+                display: true,
+                type: 0,
+                message: "Error While Uploading Your Thought.",
+              },
+            });
+          });
+      })
+      .catch((e) => {
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 0,
+            message: "Error While Uploading Your Thought.",
+          },
+        });
+      });
+
+    loadingDispatch("DISABLE");
   };
-  const { id } = useSelector((state: State) => state.ThoughtToDisplay);
+  //**************
+  //EDIT AN EXISTING THOUGHT
+  //**************
   const handleEditSubmit = () => {
+    loadingDispatch("START");
     let check = checkError();
     if (!check) return;
-    let len = Math.random() * (300 - 250) + 250;
-    const trimmedString = `${content.substring(0, len)}...`;
-    updateThoughtData(id, { content: content, trimmed: trimmedString }).then(
-      (rs) => {
-        dispatch({ type: Types.modalTypes.CLOSE_ALL });
-      }
-    );
+    let trimmed = `${content.substring(0, 75)}...`;
+    if (content.length < 150) {
+      trimmed = content;
+    }
+    firestore
+      .collection("thoughts")
+      .doc(currentThought.id)
+      .update({
+        content,
+        trimmed,
+      })
+      .then(() => {
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayRemove({ ...currentThought }),
+          });
+
+        firestore
+          .collection("users")
+          .doc(user._id)
+          .update({
+            thoughts: arrayUnion({
+              ...currentThought,
+              content,
+              trimmed,
+            }),
+          });
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 1,
+            message: "Successfully Updated",
+          },
+        });
+        dispatch({
+          type: Types.modalTypes.CLOSE_ALL,
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: Types.alertTypes.SET_NEW_ALERT,
+          payload: {
+            display: true,
+            type: 0,
+            message: "An Unknown Error Occurred, Please Try Later.",
+          },
+        });
+      });
     // CLOSE WHEN DONE;
+    loadingDispatch("DISABLE");
   };
   return (
     <>
@@ -90,7 +223,7 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
       <Box maxWidth="900px" width="96%" margin="2% auto" marginTop={2}>
         <FormControl className={classes.inputField} fullWidth>
           <TextareaAutosize
-            placeholder="Thought.."
+            placeholder="Drop Your Views"
             name="thought"
             color="primary"
             rowsMin={9}
@@ -101,14 +234,14 @@ export const ThoughtModal: React.FC<IModal> = ({ closeFunction }) => {
           />
           {errors.thought ? (
             <FormHelperText className={classes.helperText}>
-              Try To Think Big(Must be from 250 chars to 1000 chars)
+              Try To Think Big(Must be from 100 chars to 1000 chars)
             </FormHelperText>
           ) : null}
         </FormControl>
         {modalEditorMode ? (
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleEditSubmit}
             disabled={loading || errors.thought}
           >

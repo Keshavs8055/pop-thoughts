@@ -15,7 +15,6 @@ import { NavStyles } from "../../utils/classes";
 import { Types } from "../../redux/types";
 import { IAppbar, ISlideProps } from "../../utils/interfaces";
 import { State } from "../../redux/store";
-import { GetUserThoughts } from "../../utils/requests/user.reqs";
 
 const HideOnScroll = (props: ISlideProps) => {
   const { children, window } = props;
@@ -47,7 +46,6 @@ export const CustomAppBar = (props: IAppbar) => {
                     <IconButton
                       className={classes.menuButton}
                       onClick={() => {
-                        GetUserThoughts();
                         dispatch({
                           type: Types.modalTypes.TOGGLE_PROFILE_MODAL,
                         });

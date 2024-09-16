@@ -7,7 +7,7 @@ export interface ISlideProps {
 export interface IThought {
   content: string;
   author?: string;
-  dateCreated?: Date;
+  createdAt?: Date;
   id?: string;
   trimmed: string;
 }
