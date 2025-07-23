@@ -63,7 +63,7 @@ Contributions are welcome! Please open an issue or submit a pull request for new
 
 ## License
 
-This project currently does not specify a license.
+This project holds a [MIT License](https://github.com/Keshavs8055/LICENSE)
 
 ## Author
 
