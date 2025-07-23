@@ -63,7 +63,7 @@ Contributions are welcome! Please open an issue or submit a pull request for new
 
 ## License
 
-This project holds a [MIT License](https://github.com/Keshavs8055/LICENSE)
+This project holds a [MIT License](https://github.com/Keshavs8055/pop-thoughts/blob/master/LICENSE)
 
 ## Author
 
